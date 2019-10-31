@@ -29,7 +29,7 @@
 	"globalStyle": {
 	        "navigationBarTextStyle": "#333",
 	        "navigationBarTitleText": "",
-	        "navigationBarBackgroundColor": "#F8F8F8",
+	        "navigationBarBackgroundColor": "#fff",
 	        "usingComponents":{}
 	    }
 }
