@@ -1,6 +1,6 @@
 <template name="checkInfo">
 	<view>
-		<scroll-view scroll-y class="page">
+		<scroll-view scroll-y class="page1">
 			<view class="checkInfo-page-wrapper">
 				<view class="checkInfo-item">
 					<text class="title">基本信息</text>
@@ -166,9 +166,8 @@
 </script>
 
 <style lang="scss">
-	.page {
+	.page1 {
 		height: 100vh;
-		
 		.checkInfo-page-wrapper{
 			background-color:#f5f5f9;
 			padding:20upx;

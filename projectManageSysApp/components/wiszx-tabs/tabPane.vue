@@ -19,7 +19,7 @@ export default {
 <style lang="stylus">
 .tab-pane-item
     width: 100%;
-    height 100%
+    // height 100%
     display: inline-block
     white-space: initial;
     vertical-align: top;

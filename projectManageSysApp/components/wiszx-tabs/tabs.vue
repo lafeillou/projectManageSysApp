@@ -1,20 +1,19 @@
 
 <template>
     <view 
-        class="tabs"
-    >
+        class="tabs">
         <scroll-view class="active-switch" scroll-x :scroll-into-view="id" scroll-with-animation>
             <view class="switch-container" >
                 <view 
                 v-for="(item,index) in TabList" :key="index"
-                :class="['active-item',currentTab==index&&'focus',TabList.length==3&&'fix']"
+                :class="['active-item',currentTab === index && 'focus',TabList.length==3 && 'fix']"
                 @tap="tabChange(index)"
                 :id='`tab_${index}`'
                 >
                     <view class="item">{{item.title}}</view>
                 </view>
                 <view class="focus-line"
-                    :class="[TabList.length==3&&'fix']"
+                    :class="[TabList.length === 3 && 'fix']"
                     :style="{transform:transformX}"
                 >
                 </view>
@@ -67,9 +66,9 @@ export default {
     methods:{
         tabChange(index){
             if(this.currentTab!=index){
-                console.log(`emit:${index}`);
+                // console.log(`emit:${index}`);
                 this.$emit('tabs',index);
-                this.bus.$emit('tabs',index)  //事件，这里触发tabs事件
+                // this.bus.$emit('tabs',index)  //事件，这里触发tabs事件
                 this.id = `tab_${index}`
             }
         },
@@ -87,72 +86,83 @@ export default {
     }
 }
 </script>
-<style lang="stylus">
-.tabs
-    position relative
-    height calc(100vh - 100upx)
-    display flex
-    flex-direction column
-    .active-switch
-        overflow scroll
-        .switch-container
-            position relative
-            display flex
-            flex-direction row
-            .focus-line
-                flex 1
-                position absolute
-                bottom 0
-                border-bottom 4upx solid #098AE8
-                transition 0.3s
-                &.fix
-                    width 250upx
-        .active-item
-            position relative
-            min-width 160upx
-            width 160upx
-            flex 1
-            height 50upx
-            transition .3s
-            background-color: #fff
-            color #333
-            text-align: center
-            display: flex 
-            flex-direction: column
-            justify-content: space-around
-            border-bottom 2upx solid #e8e8e8
-            &.focus
-                background #fff
-                color #098AE8
-                transition-duration: .3s
-            &.fix
-                width 250upx
-            .item
-                // width: 220upx
-                padding: 0 5upx
-                overflow hidden
-                font-size: 20upx
-    .tab-pane-view
-        overflow hidden
-        background-color: #fff
-        flex 1
-        .tab-pane-group
-            display: block;
-            white-space: nowrap;
-            -webkit-transition: all .3s;
-            transition: all .3s;
-            width: 100%;
-            overflow: visible;
-            will-change: transform,left,top;
-            min-height 100upx
-            height 100%
-            .tab-pane-item
-                width: 100%;
-                min-height 100upx
-                display: inline-block
-                white-space: initial;
-                vertical-align: top;
-                font-size: 24upx;
-                box-sizing: border-box;
-                overflow: auto
+<style lang="scss">
+.tabs{
+	position:relative;
+	display:flex;
+	flex-direction:column;
+	.active-switch{
+		overflow:scroll;
+		.switch-container{
+			position:relative;
+			display:flex;
+			flex-direction:row;
+			.focus-line{
+				flex:1;
+				position:absolute;
+				bottom:0;
+				border-bottom:4upx solid #098AE8;
+				transition:0.3s;
+				&.fix{
+					width:250upx;
+				}   
+			}
+		}
+		    
+		.active-item{
+			position:relative;
+			min-width:160upx;
+			width:160upx;
+			flex:1;
+			height:50upx;
+			transition:.3s;
+			background-color:#fff;
+			color:#333;
+			text-align: center;
+			display: flex ;
+			flex-direction: column;
+			justify-content: space-around;
+			border-bottom:2upx solid #e8e8e8;
+			&.focus{
+				background:#fff;
+				color:#098AE8;
+				transition-duration: .3s;
+			}
+			    
+			&.fix{
+				 width:250upx;
+			}
+			   
+			.item {
+				padding: 0 5upx;
+				overflow:hidden;
+				font-size: 20upx;
+			} 
+		} 
+	}
+	    
+	.tab-pane-view{
+		overflow:hidden;
+		flex:1;
+		.tab-pane-group {
+			display: block;
+			white-space: nowrap;
+			transition: all .3s;
+			width: 100%;
+			overflow: visible;
+			will-change: transform,left,top;
+			min-height:100upx;
+			.tab-pane-item{
+				width: 100%;
+				min-height: 100upx;
+				display: inline-block;
+				white-space: initial;
+				vertical-align: top;
+				font-size: 24upx;
+				box-sizing: border-box;
+				overflow: auto;
+			} 
+		}  
+	} 
+}
 </style>
