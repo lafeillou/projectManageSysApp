@@ -6,14 +6,22 @@
 		},
 		{
 			"path": "pages/checkInfo/home"
-
+		},
+		{
+			"path":"pages/checkInfo/detail"
 		},
 		{
 			"path": "pages/checkContent/home"
 
 		},
 		{
+			"path":"pages/checkContent/detail"
+		},
+		{
 			"path": "pages/lawLab/home"
+		},
+		{
+			"path":"pages/lawLab/detail"
 		}
     ],
 	"globalStyle": {

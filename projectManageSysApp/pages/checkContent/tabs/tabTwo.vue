@@ -11,7 +11,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">监狱门禁系统设施设置和管理是否符合规定</text>
@@ -21,7 +21,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">监狱安全监管设施是否符合规定</text>
@@ -31,7 +31,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">监狱禁闭室、会见室等场所是否符合建设标准</text>
@@ -41,7 +41,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">监狱生产劳动场所安全是否符合规定</text>
@@ -51,7 +51,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">监狱消防设施及火灾防范措施是否符合规定</text>
@@ -61,7 +61,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">监狱对危险源、危险物品的管理和使用是否符合规定</text>
@@ -71,7 +71,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">清监查号、违禁品搜查等监狱安全规章制度是否落实，应急预案制订和执行是否符合规定</text>
@@ -81,7 +81,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">监狱有关监管安全的其他执法活动</text>
@@ -91,7 +91,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 		</view>
 	</view>
@@ -107,7 +107,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">女犯是否由女性监狱民警直接管理</text>
@@ -117,7 +117,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">罪犯是否按照犯罪类型、刑罚种类、刑期、改造表现等情况，对罪犯实行分别关押，采用不同管理方式</text>
@@ -127,7 +127,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">老病残罪犯是否分别管理，在生活、劳动等各方面予以适当照顾</text>
@@ -137,7 +137,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">罪犯是否根据考核积分、服刑时间、犯罪类型和主观恶性等情况，对罪犯实行分级管理，在活动范围、会见通信、文体活动、离监探亲等方面给予相应的处遇</text>
@@ -147,7 +147,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">特殊岗位罪犯的审批、使用、管理是否符合有关规定</text>
@@ -157,7 +157,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 		</view>
 	</view>
@@ -173,7 +173,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">监狱对罪犯使用戒具是否严格履行审批手续，是否存在随意延长戒具使用时间的情形</text>
@@ -183,7 +183,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">监狱是否使用制式警戒具，对罪犯使用戒具是否严格按照使用说明正确使用，是否存在给罪犯戴双铐、背铐、双镣等情形</text>
@@ -193,7 +193,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">监狱是否安排医生定时对使用戒具的罪犯进行身体检查，是否存在身体状况不适宜而继续使用戒具的情形</text>
@@ -203,7 +203,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 		</view>
 	</view>
@@ -220,7 +220,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">会见人员是否确系罪犯亲属、监护人，是否办理相关手续</text>
@@ -230,7 +230,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">会见和拨打电话现场是否由监狱民警全程监听、监控、监管</text>
@@ -240,7 +240,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">罪犯与亲属、监护人通信是否得到保障，是否依法实施了检查</text>
@@ -250,7 +250,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 			<view class="content-list-item">
 				<text class="txt">罪犯写给监狱的上级机关和司法机关的信件是否不被检查</text>
@@ -260,7 +260,7 @@
 					<radio class="blue radio"></radio>
 					<text class="radio-txt">否</text>
 				</radio-group>
-				<button plain class="plain-btn">检察结果<text class="cuIcon-right"></text></button>
+				<button plain class="plain-btn" @click="navToDetail()">检察结果<text class="cuIcon-right"></text></button>
 			</view>
 		</view>
 	</view>
@@ -276,6 +276,11 @@
 		methods: {
 			RadioChange() {
 				console.log('radio tap!')
+			},
+			navToDetail() {
+				uni.navigateTo({
+				    url: '../checkContent/detail'
+				});
 			}
 		}
 	}
