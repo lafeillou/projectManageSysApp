@@ -10,6 +10,9 @@ Vue.component('checkInfo',checkInfo)
 // 法律法规库
 import lawLab from './pages/lawLab/home.vue'
 Vue.component('lawLab',lawLab)
+// 登录界面
+import login from './pages/login/login.vue'
+Vue.component('login',login)
 
 import cuCustom from './colorui/components/cu-custom.vue'
 Vue.component('cu-custom',cuCustom)
