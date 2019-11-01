@@ -1,5 +1,6 @@
 <template name="lawLab">
 	<view>
+		<cu-custom bgColor="bg-gradual-blue"><block slot="content">检察内容</block></cu-custom>
 		<scroll-view scroll-y class="page3">
 			<view class="search-box">
 				<text class="search-icon cuIcon-search"></text>

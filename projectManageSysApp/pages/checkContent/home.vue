@@ -1,5 +1,6 @@
 <template name="checkContent">
 	<view >
+		<cu-custom bgColor="bg-gradual-blue"><block slot="content">检察内容</block></cu-custom>
 		<scroll-view scroll-y class="page2">
 			<Tabs
 			    :TabList="TabList"

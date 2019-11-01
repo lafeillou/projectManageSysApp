@@ -1,5 +1,6 @@
 <template name="checkInfo">
 	<view>
+		<cu-custom bgColor="bg-gradual-blue"><block slot="content">检察信息</block></cu-custom>
 		<scroll-view scroll-y class="page1">
 			<view class="checkInfo-page-wrapper">
 				<view class="checkInfo-item">
