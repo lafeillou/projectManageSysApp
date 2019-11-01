@@ -37,7 +37,7 @@
 				</view>
 				<view class="row">
 					<view class="col" style="width:21%"><text class="th">检察员签名</text></view>
-					<view class="col" style="width:79%"><text class="td">XXXXXXX</text></view>
+					<view class="col" style="width:79%"><text class="td">XXXXXXXl</text></view>
 				</view>
 			</view>
 		</scroll-view>
@@ -59,6 +59,7 @@
 		.main-wrap{
 			padding:50upx 20upx 20upx 20upx;
 			.custom-table{
+				border:1upx solid #e8e8e8;
 				.row{
 					display:flex;
 					.col{
