@@ -2,34 +2,22 @@
 	"pages": [
 		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "检察信息",
-				"navigationBarShadow":{
-					"colorType": "gray"
-				}
-			}
+			"path": "pages/index/index"
 		},
 		{
 			"path": "pages/checkInfo/home"
+
+		},
+		{
+			"path": "pages/checkContent/home"
+
+		},
+		{
+			"path": "pages/lawLab/home"
 		}
     ],
-	// "globalStyle": {
-	// 	"mp-alipay": {
-	// 		/* 支付宝小程序特有相关 */
-	// 		"transparentTitle": "always",
-	// 		"allowsBounceVertical": "NO"
-	// 	},
-	// 	"navigationBarBackgroundColor": "#1890FF",
-	// 	"navigationBarTitleText": "巡回检察PAD端应用程序",
-	// 	"navigationStyle": "custom",
-	// 	"navigationBarTextStyle": "white"
-	// },
 	"globalStyle": {
-	        "navigationBarTextStyle": "#333",
-	        "navigationBarTitleText": "",
-	        "navigationBarBackgroundColor": "#fff",
-	        "usingComponents":{}
-	    }
+		"navigationStyle": "custom",
+	    "usingComponents":{}
+	}
 }
