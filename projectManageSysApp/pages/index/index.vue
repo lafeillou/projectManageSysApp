@@ -32,12 +32,12 @@
 		data() {
 		return {
 				PageCur: 'checkInfo',
-				loged: false
+				loged: true
 			}
 		},
 		methods: {
 			login(data) {
-				console.log(data)
+				// console.log(data)
 				this.loged = data
 			},
 			NavChange: function(e) {
