@@ -89,13 +89,18 @@
 				&:last-child{
 					border-bottom:none;
 				}
+				display:flex;
 				.title{
 					font-size:20upx;
 					color:#333;
+					flex:auto;
+					overflow:hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
 				}
 				.cuIcon-right{
-					float:right;
 					color:#999;
+					flex:none;
 				}
 			}
 		}
