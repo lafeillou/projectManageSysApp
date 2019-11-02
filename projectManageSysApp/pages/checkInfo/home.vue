@@ -169,7 +169,12 @@
 			}
 		},
 		mounted() {
-			select()
+			select('t_investigation_type', {deep: 2,parentId: 20}).then(res => {
+				console.log(res.length)
+				res.forEach(function (item) {
+					console.log(item)
+				})
+			})
 		},
 		onShow() {
 			console.log("success")
