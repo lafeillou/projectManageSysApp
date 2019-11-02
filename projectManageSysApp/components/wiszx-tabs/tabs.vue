@@ -1,12 +1,12 @@
 
 <template>
     <view 
-        class="tabs">
+        class="tabs" style="position:fixed;height:calc(100vh - 87upx);top:87upx;left:0;width:100%;">
         <scroll-view class="active-switch" scroll-x :scroll-into-view="id" scroll-with-animation>
             <view class="switch-container" >
                 <view 
                 v-for="(item,index) in TabList" :key="index"
-                :class="['active-item',currentTab === index && 'focus',TabList.length==3 && 'fix']"
+                :class="['active-item',currentTab === index && 'focus',TabList.length === 3 && 'fix']"
                 @tap="tabChange(index)"
                 :id='`tab_${index}`'
                 >
@@ -22,10 +22,11 @@
         <view class="tab-pane-view"
             @touchstart='touchstart'
             @touchend='touchend'
+			style="overflow-y:auto;"
         >
             <view 
               class="tab-pane-group"
-              :style="{transform:transformXx}"  
+              :style="{transform:transformXx}"
             >
             <slot></slot>
             </view>

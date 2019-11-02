@@ -41,6 +41,7 @@ import { select } from '../../service/service'
 	.page4{
 		height:100vh;
 		background-color:#fff;
+		overflow:auto;
 		.main-wrap{
 			padding:30upx 20upx 20upx 20upx;
 			.title{

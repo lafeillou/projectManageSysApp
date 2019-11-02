@@ -72,6 +72,7 @@
 <style lang="scss">
 	.page2 {
 		height: 100vh;
+		overflow:auto;
 		.custom-header{
 			height:87upx;
 			width:100%;
