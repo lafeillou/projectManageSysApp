@@ -1,6 +1,6 @@
 <template>
 	<view class="page5">
-		<cu-custom bgColor="bg-gradual-blue" isBack="true"><block slot="backText">返回</block><block slot="content">巡回检察记录</block></cu-custom>
+		<cu-custom bgColor="bg-gradual-blue" isBack="true"><block slot="backText">返回</block><block slot="content">巡回检察记录</block><block slot="right"><text style="margin-right:30upx;">保存</text></block></cu-custom>
 		<scroll-view scroll-y class="main-wrap">
 			<view class="custom-table">
 				<view class="row">
