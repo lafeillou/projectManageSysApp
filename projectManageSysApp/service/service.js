@@ -63,20 +63,39 @@ export function deleteTables(tableNames = []) {
     })
 }
 
-export function select(){
-    plus.sqlite.selectSql({
-        name: DB_NAME,
-        sql: 'select * from t_investigation',
-        success: function(data){
-            console.log(data);
-            for(var i in data){
-                console.log(data[i]);
+/**
+ * 通用查询接口
+ * @param tableName 表名
+ * @param params 条件对象  如 {deep: 2,parentId: 20} 表示查询 tableName 表中 deep字段为2，且parentId 为20的 数据行
+ * @since 2019/11/02
+ * @returns {Promise<unknown>}
+ */
+export function select(tableName, params){
+    if(!tableName) return
+    return new Promise((resolve, reject) => {
+        let sql = `select * from ${tableName} `
+        let condition = ''
+        if(params) {
+            for(let key in params){
+                condition += ` ${key} = '${params[key]}' and`
             }
-        },
-        fail: function(e){
-            console.log('selectSql failed: '+JSON.stringify(e));
         }
-    });
+        if(condition) {
+            sql = sql + 'where' + condition
+            sql = sql.substr(0, sql.length-3)
+        }
+        plus.sqlite.selectSql({
+            name: DB_NAME,
+            sql,
+            success: function(data){
+                resolve(data)
+            },
+            fail: function(e){
+                console.log('selectSql failed: '+JSON.stringify(e));
+                reject(e)
+            }
+        });
+    })
 }
 
 export function copyDataBase() {
