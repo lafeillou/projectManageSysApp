@@ -64,11 +64,54 @@ export function deleteTables(tableNames = []) {
 }
 
 /**
+ * 通用update方法
+ * 注意row对象中一定要有id字段，否则无法定位是哪一行数据需要修改
+ * @param tableName
+ * @param row {id: 10, value: 0} 修改tableName表中 id为10的数据行的value字段 为0
+ * @returns {Promise<unknown>}
+ */
+export function update(tableName, row) {
+    // 入参校验
+    if(!tableName || !row.id) return
+    let sql = `UPDATE ${tableName} set`
+    let condition = ''
+    for(let key in row){
+        if(key !== 'id') {
+            condition += ` ${key} = '${row[key]}' ,`
+        }
+    }
+    console.log('修改数据行condition:',condition)
+    if(condition) {
+        sql += condition
+        // 去掉最后的','
+        sql = sql.substr(0, sql.length-1)
+        sql = sql + `where id = ${row.id}`
+    } else {
+        // 只有id字段 没有 其他待修改的字段 不执行修改数据行操作
+        return
+    }
+    return new Promise((resolve, reject) => {
+        console.log('修改数据行的sql为：', sql)
+        plus.sqlite.executeSql({
+            name: DB_NAME,
+            sql,
+            success: function(data){
+                resolve(data)
+            },
+            fail: function(e){
+                console.log('executeSql failed: '+JSON.stringify(e));
+                reject(e)
+            }
+        });
+    })
+}
+
+/**
  * 通用查询接口
  * @param tableName 表名
  * @param params 条件对象  如 {deep: 2,parentId: 20} 表示查询 tableName 表中 deep字段为2，且parentId 为20的 数据行
  * @since 2019/11/02
- * @returns {Promise<unknown>}
+ * @returns {Promise<unknown>} 返回数组
  */
 export function select(tableName, params){
     if(!tableName) return
@@ -96,6 +139,37 @@ export function select(tableName, params){
             }
         });
     })
+}
+
+export async function getJCNR() {
+    const result = {
+        status: 200,
+        message: "xxx",
+        data: null
+    }
+    const _0 = await select('t_investigation_type', {deep:0})
+    result.data = _0
+    for(let item of _0) {
+        const id = item.id
+        const _1 = await select('t_investigation_type', {parentId: id})
+        item.children = _1
+        for(let q of _1) {
+            console.log('1级深度',q.id)
+            const _2 = await select('t_investigation_type', {parentId: q.id})
+            if(_2.length > 0) {
+                q.children = _2
+                for(let s of _2) {
+                    console.log('2级深度',s.id)
+                    const _3 = await select('t_investigation', {typeId: s.id})
+                    s.children = _3
+                }
+            } else {
+                q.children = await select('t_investigation', {typeId: q.id})
+            }
+
+        }
+    }
+    return result
 }
 
 export function copyDataBase() {
