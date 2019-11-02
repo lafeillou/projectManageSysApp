@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<login v-on:loged = "login" v-if="!loged" class="login-com"></login>
 		<checkInfo v-if="PageCur=='checkInfo'"></checkInfo>
 		<checkContent v-if="PageCur=='checkContent'"></checkContent>
 		<lawLab v-if="PageCur=='lawLab'"></lawLab>
@@ -30,10 +31,15 @@
 	export default {
 		data() {
 		return {
-				PageCur: 'checkInfo'
+				PageCur: 'checkInfo',
+				loged: false
 			}
 		},
 		methods: {
+			login(data) {
+				console.log(data)
+				this.loged = data
+			},
 			NavChange: function(e) {
 				// console.log(JSON.stringify(e))
 				this.PageCur = e.currentTarget.dataset.cur
@@ -42,6 +48,13 @@
 	}
 </script>
 
-<style>
-
+<style lang="scss">
+.login-com{
+	position:fixed;
+	left:0;
+	top:0;
+	width:100%;
+	height:100vh;
+	z-index:9999999;
+}
 </style>
