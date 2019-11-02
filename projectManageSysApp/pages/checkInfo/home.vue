@@ -155,6 +155,7 @@
 </template>
 
 <script>
+	import { select } from '../../service/service'
 	export default {
 		// name: "CheckInfo",
 		data() {
@@ -166,6 +167,9 @@
 				    url: '../checkInfo/detail'
 				});
 			}
+		},
+		mounted() {
+			select()
 		},
 		onShow() {
 			console.log("success")
