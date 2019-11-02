@@ -6,37 +6,9 @@
 				<text class="search-icon cuIcon-search"></text>
 				<input class="uni-input" placeholder="搜索" />
 			</view>
-			<view class="law-list-wrap">
-				<view class="law-list-item" @click="navToDetail()">
-					<text class="title">《中华人民共和国监狱法》</text>
-					<text class="cuIcon-right"></text>
-				</view>
-				<view class="law-list-item" @click="navToDetail()">
-					<text class="title">《监管改造环境规范》</text>
-					<text class="cuIcon-right"></text>
-				</view>
-				<view class="law-list-item" @click="navToDetail()">
-					<text class="title">《罪犯改造行为规范》</text>
-					<text class="cuIcon-right"></text>
-				</view>
-				<view class="law-list-item" @click="navToDetail()">
-					<text class="title">《监狱教育改造工作规定》</text>
-					<text class="cuIcon-right"></text>
-				</view>
-				<view class="law-list-item" @click="navToDetail()">
-					<text class="title">《劳改劳教工作干警行为准则》</text>
-					<text class="cuIcon-right"></text>
-				</view>
-				<view class="law-list-item" @click="navToDetail()">
-					<text class="title">《司法部关于计分考核奖罚罪犯的规定》</text>
-					<text class="cuIcon-right"></text>
-				</view>
-				<view class="law-list-item" @click="navToDetail()">
-					<text class="title">《最高人民法院关于办理减刑、假释案件具体应用法律若干问题的规定》</text>
-					<text class="cuIcon-right"></text>
-				</view>
-				<view class="law-list-item" @click="navToDetail()">
-					<text class="title">《监狱提请减刑、假释工作》</text>
+			<view class="law-list-wrap" v-for="item in lawData" :key="item.id">
+				<view class="law-list-item" @tap="navToDetail(item.id)">
+					<text class="title">{{item.name}}</text>
 					<text class="cuIcon-right"></text>
 				</view>
 			</view>
@@ -46,16 +18,31 @@
 </template>
 
 <script>
+	import { select } from '../../service/service'
 	export default {
 		// name: "LawLab",
 		data() {
-			return {}
+			return {
+				lawData: []
+			}
+		},
+		mounted() {
+			this.getLawList().then(res=> {
+				this.lawData = res;
+			});
 		},
 		methods: {
-			navToDetail() {
+			navToDetail(id) {
 				uni.navigateTo({
-				    url: '../lawLab/detail'
+					url:`../lawLab/detail?id=${id}`
 				});
+			},
+			getLawList() {
+				return 	new Promise((resolve,reject) => {
+					select('t_law').then(res=> {
+						resolve(res)
+					});
+				})
 			}
 		},
 		onShow() {
@@ -102,13 +89,18 @@
 				&:last-child{
 					border-bottom:none;
 				}
+				display:flex;
 				.title{
 					font-size:20upx;
 					color:#333;
+					flex:auto;
+					overflow:hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
 				}
 				.cuIcon-right{
-					float:right;
 					color:#999;
+					flex:none;
 				}
 			}
 		}
