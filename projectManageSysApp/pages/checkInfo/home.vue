@@ -185,6 +185,7 @@
 <style lang="scss">
 	.page1 {
 		height: 100vh;
+		overflow:auto;
 		.checkInfo-page-wrapper{
 			background-color:#f5f5f9;
 			padding:20upx;
