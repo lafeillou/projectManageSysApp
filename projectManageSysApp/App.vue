@@ -1,5 +1,34 @@
 <script>
 	import Vue from 'vue'
+    import { initTable, copyDataBase, dbFileName, DB_NAME } from './service/service.js'
+    const DB_PATH = `_doc/${dbFileName}` //_doc/localbase.db
+    function openDB() {
+	    // 判断sqlite 是否已经打开 无需重复打开
+        const boolean = plus.sqlite.isOpenDatabase({
+            name: DB_NAME,
+            path: DB_PATH
+        })
+        if(boolean) return
+        // 没打开 则打开sqlite
+        plus.sqlite.openDatabase({
+            name: DB_NAME,
+            path: DB_PATH,
+            success: function(e){
+                console.log('openDatabase success!');
+            },
+            fail: function(e){
+                console.log('openDatabase failed: '+JSON.stringify(e));
+            }
+        });
+    }
+    function closeDB() {
+        plus.sqlite.closeDatabase({
+            name: DB_NAME,
+            success: function(e){
+                console.log('closeDatabase success!');
+            },
+        })
+    }
 	export default {
 		onLaunch: function() {
 			uni.getSystemInfo({
@@ -24,14 +53,26 @@
 					Vue.prototype.StatusBar = e.statusBarHeight;
 					Vue.prototype.CustomBar = e.statusBarHeight + e.titleBarHeight;
 					// #endif
+                    // #ifdef APP-PLUS
+                    // initTable();
+                    copyDataBase();
+                    openDB();
+                    // #endif
 				}
 			})
 		},
 		onShow: function() {
 			console.log('App Show')
+            // #ifdef  APP-PLUS
+            openDB();
+            // #endif
 		},
 		onHide: function() {
 			console.log('App Hide')
+            // 当前应用not active时 关闭sqlite 释放资源
+            // #ifdef  APP-PLUS
+            closeDB()
+            // #endif
 		}
 
 	}
