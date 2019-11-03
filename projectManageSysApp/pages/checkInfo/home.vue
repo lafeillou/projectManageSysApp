@@ -155,7 +155,7 @@
 </template>
 
 <script>
-	import { select } from '../../service/service'
+	import {select, update} from '../../service/service'
 	export default {
 		// name: "CheckInfo",
 		data() {
@@ -173,6 +173,12 @@
 				console.log(res.length)
 				res.forEach(function (item) {
 					console.log(item)
+				})
+				update('t_investigation', {id:789, value:1}).then(res => {
+					console.log('update 789 operation:',JSON.stringify(res))
+					select('t_investigation', {id:789}).then(a => {
+						console.log('789:', JSON.stringify(a))
+					})
 				})
 			})
 		},

@@ -1,7 +1,8 @@
 <script>
 	import Vue from 'vue'
-    import { initTable, copyDataBase, dbFileName, DB_NAME } from './service/service.js'
-    const DB_PATH = `_doc/${dbFileName}` //_doc/localbase.db
+    import { initTables, copyDataBase, CUR_DBFILENAME, CUR_DB_NAME } from './service/service.js'
+    const DB_PATH = `_doc/${CUR_DBFILENAME}` //_doc/localbase.db
+    const DB_NAME = CUR_DB_NAME
     function openDB() {
 	    // 判断sqlite 是否已经打开 无需重复打开
         const boolean = plus.sqlite.isOpenDatabase({
@@ -20,6 +21,33 @@
                 console.log('openDatabase failed: '+JSON.stringify(e));
             }
         });
+    }
+    function openStaticDB() {
+	    // 判断sqlite 是否已经打开 无需重复打开
+        const boolean = plus.sqlite.isOpenDatabase({
+            name: `db`,
+            path: `_doc/local.db`
+        })
+        if(boolean) return
+        // 没打开 则打开sqlite
+        plus.sqlite.openDatabase({
+            name: `db`,
+            path: `_doc/local.db`,
+            success: function(e){
+                console.log('open static Database success!');
+            },
+            fail: function(e){
+                console.log('open static Database failed: '+JSON.stringify(e));
+            }
+        });
+    }
+    function closeStaticDB() {
+        plus.sqlite.closeDatabase({
+            name: `db`,
+            success: function(e){
+                console.log('close static Database success!');
+            },
+        })
     }
     function closeDB() {
         plus.sqlite.closeDatabase({
@@ -55,8 +83,10 @@
 					// #endif
                     // #ifdef APP-PLUS
                     // initTable();
-                    copyDataBase();
+                    // copyDataBase();
+                    // openStaticDB();
                     openDB();
+                    initTables()
                     // #endif
 				}
 			})
@@ -65,6 +95,7 @@
 			console.log('App Show')
             // #ifdef  APP-PLUS
             openDB();
+            // openStaticDB();
             // #endif
 		},
 		onHide: function() {
@@ -72,6 +103,7 @@
             // 当前应用not active时 关闭sqlite 释放资源
             // #ifdef  APP-PLUS
             closeDB()
+            // closeStaticDB()
             // #endif
 		}
 
