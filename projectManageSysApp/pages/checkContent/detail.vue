@@ -34,10 +34,16 @@
 						<view class="body-text" style="padding-left:30upx;"><text class="cu-tag bg-blue radius sm" style="margin-right:10upx;">问题{{index + 1}}</text>
 							{{item.result}}
 						</view>
-						
-						<view class="image-list-wrap" v-for="(obj,i) in item.images.split(',')" :key="i" style="display:flex;">
-							<text class="cu-avatar radius" :style="{'background-image':'url('+ obj +')'}" style="flex:none;display:inline-block;width:80upx;height:80upx;"></text>
+						<view class="padding" style="width:100%;height:100upx;background-color:red;" v-for="(obj,i) in item.images.split(',')" :key="i">
+							<image :src="obj" mode="aspectFill" class="cu-avatar margin-right"></image>
 						</view>
+						<!-- <view class="padding" v-for="(obj,i) in item.images.split(',')" :key="i">
+							{{JSON.stringify(item.images)}}
+							<view class="cu-avatar radius margin-left" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg)"></view>
+						</view> -->
+						<!-- <view class="image-list-wrap" v-for="(obj,i) in item.images.split(',')" :key="i" style="display:flex;">
+							<text class="cu-avatar radius" :style="{'background-image':'url('+ obj +')'}" style="flex:none;display:inline-block;width:80upx;height:80upx;"></text>
+						</view> -->
 					</view>
 				</div>
 				
