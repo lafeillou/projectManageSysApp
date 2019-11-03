@@ -440,11 +440,30 @@ export function search_law(keyword) {
     })
 }
 
+function getHistoryProblemInfo() {
+    return new Promise((resolve, reject) => {
+        let sql = `select checkId, count(checkId) as num from t_problem group by checkId`
+        console.log('sql: ', sql);
+        plus.sqlite.selectSql({
+            name: CUR_DB_NAME,
+            sql,
+            success: function(data){
+                resolve(data)
+            },
+            fail: function(e){
+                console.log('getHistoryProblemInfo failed: '+JSON.stringify(e));
+                reject(e)
+            }
+        });
+    })
+}
+
 export async function getJCNR() {
     const result = {
         status: 200,
         message: "xxx",
-        data: null
+        data: null,
+        historyProblemInfo: []
     }
     const _0 = await select('t_investigation_type', {deep:0})
     result.data = _0
@@ -468,6 +487,7 @@ export async function getJCNR() {
 
         }
     }
+    result.historyProblemInfo = await getHistoryProblemInfo();
     return result
 }
 
