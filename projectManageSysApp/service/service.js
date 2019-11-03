@@ -234,7 +234,6 @@ function _get_start_end_Time(str = '', spl = '/') {
 
 export function get_record(dateStr) {
     const today = _get_start_end_Time()
-    const sql = select('t_problem', {})
     return new Promise((resolve, reject) => {
         let sql = `select * from t_problem where createTime between ${today.start} and ${today.end}`
         plus.sqlite.selectSql({
@@ -298,6 +297,27 @@ export function insert_report_perday(params) {
                         reject(e)
                     }
                 });
+            }
+        });
+    })
+}
+
+/**
+ * 查询某一天的report记录
+ * @param dayStr
+ */
+export function get_report_perday(dayStr) {
+    return new Promise((resolve, reject) => {
+        let sql = `select * from t_report_perday where id = '${dayStr}'`
+        plus.sqlite.selectSql({
+            name: CUR_DB_NAME,
+            sql,
+            success: function(data){
+                resolve(data)
+            },
+            fail: function(e){
+                console.log('selectSql failed: '+JSON.stringify(e));
+                reject(e)
             }
         });
     })
