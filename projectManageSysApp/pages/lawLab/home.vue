@@ -4,7 +4,8 @@
 		<scroll-view scroll-y >
 			<view class="search-box">
 				<text class="search-icon cuIcon-search"></text>
-				<input class="uni-input" placeholder="搜索" />
+				<input class="uni-input" placeholder="搜索" v-model="keyword" confirm-type="search" @confirm="doSearch()"/>
+				<text class="close-icon cuIcon-close" @tap.stop="clearInput()" v-if="keyword"></text>
 			</view>
 			<view class="law-list-wrap" v-for="item in lawData" :key="item.id">
 				<view class="law-list-item" @tap="navToDetail(item.id)">
@@ -18,11 +19,13 @@
 </template>
 
 <script>
-	import { select } from '../../service/service'
+	import { select, search_law } from '../../service/service'
 	export default {
 		// name: "LawLab",
 		data() {
 			return {
+				// 关键字
+				keyword: '',
 				lawData: []
 			}
 		},
@@ -31,7 +34,29 @@
 				this.lawData = res;
 			});
 		},
+		watch: {
+			keyword: function(newVal) {
+				if (newVal === '') {
+					this.getLawList().then(res=> {
+						this.lawData = res;
+					});
+				} else {
+					this.doSearch();
+				}
+			}
+		},
 		methods: {
+			// 清空关键字
+			clearInput() {
+				this.keyword = '';
+			},
+			// 查询操作
+			doSearch() {
+				search_law(this.keyword).then(res => {
+					// console.log(JSON.stringify(res));
+					this.lawData = res;
+				})
+			},
 			navToDetail(id) {
 				uni.navigateTo({
 					url:`../lawLab/detail?id=${id}`
@@ -65,6 +90,14 @@
 				left:30upx;
 				color:#bbb;
 				font-size:20upx;
+			}
+			.close-icon{
+				position:absolute;
+				top:36upx;
+				right:35upx;
+				color:#bbb;
+				font-size:20upx;
+				z-index:9999999;
 			}
 			.uni-input{
 				background-color:#fff;

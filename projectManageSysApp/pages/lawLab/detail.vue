@@ -3,7 +3,7 @@
 		<cu-custom bgColor="bg-gradual-blue" isBack="true"><block slot="backText">返回</block><block slot="content">法律法规详情</block></cu-custom>
 		<view class="search-box">
 			<text class="search-icon cuIcon-search"></text>
-			<input class="uni-input" placeholder="搜索" />
+			<input class="uni-input" placeholder="搜索" confirm-type="search"/>
 		</view>
 		<scroll-view scroll-y class="main-wrap">
 			<!-- <rich-text class="title" :nodes="detailData.title"></rich-text>
