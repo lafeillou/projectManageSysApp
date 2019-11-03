@@ -27,7 +27,6 @@
 						</view>
 					</view>
 				</view>
-				
 				<div class="history-problem-wrap">
 					<text class="title">历史问题</text>
 					<view class="status"><text>已整改</text></view>
@@ -94,6 +93,7 @@
 				});
 			},
 			useCamera() {
+				let that = this;
 				plus.camera.getCamera().captureImage(function(absPath) {  
 				        //创建一个 bitmap 对象，参数1是id，参数2是拍照返回的图片绝对路径  
 				    let bitmap = new plus.nativeObj.Bitmap('test', absPath);  
@@ -105,7 +105,7 @@
 				            format: 'jpg',  
 				        },  
 				        function(event) {
-							imgList.push(absPath);
+							that.imgList.push(absPath);
 				            // Code here  
 				            // 保存后的图片url路径，以"file://"开头  
 				            let target = event.target;  
