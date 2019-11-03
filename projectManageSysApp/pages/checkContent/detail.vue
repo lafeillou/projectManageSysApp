@@ -1,9 +1,9 @@
 <template>
 	<view class="page5">
-		<cu-custom bgColor="bg-gradual-blue" isBack="true"><block slot="backText">返回</block><block slot="content">备注</block><block slot="right"><text style="margin-right:30upx;">保存</text></block></cu-custom>
+		<cu-custom bgColor="bg-gradual-blue" isBack="true"><block slot="backText">返回</block><block slot="content">备注</block><block slot="right"><text style="margin-right:30upx;" @tap="saveProblem()">保存</text></block></cu-custom>
 		<scroll-view scroll-y>
 			<view class="input-content-wrap">
-				<textarea class="textAreaInput" type="text" placeholder="请输入备注内容"/>
+				<textarea class="textAreaInput" type="text" v-model="remark" placeholder="请输入备注内容"/>
 			</view>
 			<view class="photo-content-wrap">
 				<view class="cu-bar bg-white">
@@ -38,20 +38,40 @@
 </template>
 
 <script>
-	import { select } from '../../service/service';
+	import { select,insert_problems } from '../../service/service';
 	export default {
 		data() {
 			return {
+				currCheckId: '',
+				currType: '',
+				// 备注文字
+				remark: '',
 				// 待存储图片列表
 				imgList: []
 			}
 		},
 		onLoad:  function(option) {
+			this.currCheckId = option.id;
+			this.currType = option.type;
 			 this.getHistoryList(option.id).then(res => {
 				 console.log(JSON.stringify(res));
 			 })
 		},
 		methods: {
+			// 保存问题
+			saveProblem() {
+				insert_problems({
+					checkId: this.currCheckId,
+					result: this.remark,
+					images: this.imgList,
+					type:this.currType
+				}).then(res => {
+					console.log(res)
+					select('t_problem').then(res => {
+						console.log(res)
+					})
+				})
+			},
 			// 查询历史问题列表
 			getHistoryList(checkId) {
 				return new Promise((resolve,reject) => {

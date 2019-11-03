@@ -10,7 +10,7 @@ export const SELF_DB_NAME = 'self';
 // 自己生成的db，数据文件名称
 export const SELF_DB_FILENAME = 'self.db'
 // 初始化表数据 是否覆盖初始化
-export const isCover = false
+export const isCover = true
 
 export const CUR_DB_NAME = SELF_DB_NAME
 export const CUR_DBFILENAME = SELF_DB_FILENAME
@@ -99,8 +99,9 @@ create table if not exists "t_investigation"
  * @returns {Promise<unknown>}
  */
 export function insert_problems(params) {
-    const sql = `INSERT INTO t_problem (checkId, result, images, createTime, type) VALUES (${params.checkId}, ${params.result}, ${params.images}, ${new Date().getTime()}, ${params.type})`
-    return new Promise((resolve, reject) => {
+    const sql = `INSERT INTO t_problem (checkId, result, images, createTime, type) VALUES (${params.checkId}, '${params.result}', '${params.images}', ${new Date().getTime()}, ${params.type})`
+    console.log(sql);
+	return new Promise((resolve, reject) => {
         plus.sqlite.executeSql({
             name: CUR_DB_NAME,
             sql,

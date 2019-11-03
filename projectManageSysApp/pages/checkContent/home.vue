@@ -29,7 +29,7 @@
 										<text class="radio-txt">否</text>
 									</view>
 								</view>
-								<button plain class="plain-btn" @tap="navToDetail(obj.id)">检察结果<text class="cuIcon-right"></text></button>
+								<button plain class="plain-btn" @tap="navToDetail(obj.id, 1)">检察结果<text class="cuIcon-right"></text></button>
 							</view>
 						</view>
 					</view>
@@ -50,7 +50,7 @@
 			        					<text class="radio-txt">否</text>
 			        				</view>
 			        			</view>
-			        			<button plain class="plain-btn" @tap="navToDetail(obj.id)">检察结果<text class="cuIcon-right"></text></button>
+			        			<button plain class="plain-btn" @tap="navToDetail(obj.id, 7)">检察结果<text class="cuIcon-right"></text></button>
 			        		</view>
 			        	</view>
 			        </view>
@@ -73,7 +73,7 @@
 											<text class="radio-txt">否</text>
 										</view>
 			        				</view>
-			        				<button plain class="plain-btn" @tap="navToDetail(o.id)">检察结果<text class="cuIcon-right"></text></button>
+			        				<button plain class="plain-btn" @tap="navToDetail(o.id, 16)">检察结果<text class="cuIcon-right"></text></button>
 			        			</view>
 			        		</view>
 			        	</view>
@@ -145,9 +145,9 @@
 				this.update(targetObj.id, targetObj.value)
 				// console.log(JSON.stringify(targetObj))
 			} ,
-			navToDetail(id) {
+			navToDetail(id,type) {
 				uni.navigateTo({
-				    url: `../checkContent/detail?id=${id}`
+				    url: `../checkContent/detail?id=${id}&type=${type}`
 				});
 			},
 			getCheckItemList() {
