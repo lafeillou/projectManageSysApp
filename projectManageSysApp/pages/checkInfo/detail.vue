@@ -1,6 +1,6 @@
 <template>
 	<view class="page5">
-		<cu-custom bgColor="bg-gradual-blue" isBack="true"><block slot="backText">返回</block><block slot="content">巡回检察记录</block><block slot="right"><text style="margin-right:30upx;">保存</text></block></cu-custom>
+		<cu-custom bgColor="bg-gradual-blue" isBack="true"><block slot="backText">返回</block><block slot="content">巡回检察记录</block><block slot="right"><text style="margin-right:20upx;" @tap="refreshReport()">刷新</text><text style="margin-right:30upx;" @tap="saveReport()">保存</text></block></cu-custom>
 		<scroll-view scroll-y class="main-wrap">
 			<view class="custom-table">
 				<view class="row">
@@ -23,7 +23,29 @@
 				</view>
 				<view class="row">
 					<view class="col" style="width:21%"><text class="th">检察情况</text></view>
-					<view class="col" style="width:79%"><text class="td" style="text-align:left;">1、禁闭室、一监区个别民警文明规范执法意识不强，执法行为简单粗暴，服刑人员反映强烈；\n2、部分民警对法律法规和政策学习不够，对服刑人员咨询不能正确回应，在犯群中造成不良影响。如一监区有服刑人员反映，监区犯群中流传有“2019年减刑政策又要变化，2018年报不了减刑的奖励全部要作废”的错误言论。</text></view>
+					<view class="col" style="width:79%">
+						<text class="td" style="text-align:left;text-indent:0;padding:0;" v-if="reportData && ((reportData[0].children.length + reportData[1].children.length + reportData[2].children.length) > 0)">
+						{{currDateStr}}共发现问题{{reportData[0].children.length + reportData[1].children.length + reportData[2].children.length}}个.问题明细情况如下:\n
+							<text v-if="reportData[0].children.length > 0">1、刑罚执行类问题{{reportData[0].children.length}}个,分别是: \n
+								<text v-for="(item,index) in reportData[0].children" :key="index">
+									({{index+1}})、{{item.result}}\n
+								</text>
+							</text>
+							<text v-if="reportData[1].children.length > 0">2、教育改造类问题{{reportData[1].children.length}}个,分别是: \n
+								<text v-for="(item,index) in reportData[1].children" :key="index">
+									({{index+1}})、{{item.result}}\n
+								</text>
+							</text>
+							<text v-if="reportData[2].children.length > 0">3、狱政管理类问题{{reportData[2].children.length}}个,分别是: \n
+								<text v-for="(item,index) in reportData[2].children" :key="index">
+									({{index+1}})、{{item.result}}\n
+								</text>
+							</text>
+						</text>
+						<text class="td" style="text-align:left;" v-else>
+							{{reportResult}}
+						</text>
+					</view>
 				</view>
 				<view class="row">
 					<view class="col" style="width:21%"><text class="th">备注</text></view>
@@ -39,27 +61,95 @@
 </template>
 
 <script>
-	import {get_report_perday, get_record} from '../../service/service'
+	import {get_report_perday, get_record, insert_report_perday} from '../../service/service';
+	import _ from 'lodash';
+	
 	export default {
 		data() {
 			return {
-				currDateStr: ''
+				currDateStr: '',
+				// 报告数据
+				reportData: null,
+				// 生成的结论
+				reportResult: ''
 			}
 		},
 		onLoad:  function(option) {
 			this.currDateStr = option.date;
 			// 是否已经生成了报告
 			get_report_perday(this.currDateStr).then(res => {
-				console.log('先查报告表: ');
-				console.log(JSON.stringify(res));
 				if (res.length === 0) {
 					// 没有生成报告，则去生成报告
 					get_record(this.currDateStr).then(res => {
-						console.log(JSON.stringify(res));
+						this.reportData = res;
 					})
+				} else {
+					// 如果已经生成过报告，则显示报告表的内容
+					console.log(JSON.stringify(res));
+					this.reportResult = res[0].condition;
 				}
 			});
 		},
+		methods: {
+			// 刷新报告
+			refreshReport() {
+				get_record(this.currDateStr).then(res => {
+					this.reportData = res;
+				})
+			},
+			// 保存报告
+			saveReport() {
+				if (!this.reportData) {
+					uni.showToast({
+					    title: '您已经保存过了！',
+						icon: 'none',
+						position: 'top',
+					    duration: 3000
+					});
+					return;
+				}
+				let strTotal = '';
+				if (this.reportData[0].children.length + this.reportData[1].children.length + this.reportData[2].children.length > 0) {
+					let str1 = `${this.currDateStr}共发现问题${this.reportData[0].children.length + this.reportData[1].children.length + this.reportData[2].children.length}个.问题明细情况如下:\n`;
+					let str2 = '';
+					let str3 = '';
+					let str4 = '';
+					if (this.reportData[0].children.length > 0) {
+						str2 = `1、刑罚执行类问题${this.reportData[0].children.length}个,分别是: \n`
+						_.forEach(this.reportData[0].children,(o,i)=>{
+							str2 += `(${i+1})、${o.result}\n`;
+						})
+					}
+					
+					if (this.reportData[1].children.length > 0) {
+						str3 = `2、刑罚执行类问题${this.reportData[1].children.length}个,分别是: \n`
+						_.forEach(this.reportData[1].children,(o,i)=>{
+							str3 += `(${i+1})、${o.result}\n`;
+						});
+					}
+					if (this.reportData[2].children.length > 0) {
+						str4 = `3、刑罚执行类问题${this.reportData[2].children.length}个,分别是: \n`
+						_.forEach(this.reportData[2].children,(o,i)=>{
+							str4 += `(${i+1})、${o.result}\n`;
+						});
+					}
+					strTotal = str1 + str2 + str3 + str4;
+					insert_report_perday({
+						id: this.currDateStr,
+						condition: strTotal
+					}).then(res => {
+						uni.showToast({
+						    title: '保存成功！',
+							icon: 'none',
+							position: 'top',
+						    duration: 3000
+						});
+					})
+				} else {
+					return;
+				}
+			}
+		}
 	}
 </script>
 
