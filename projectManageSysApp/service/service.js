@@ -232,7 +232,7 @@ function _get_start_end_Time(str = '', spl = '/') {
     return res
 }
 
-function get_record(dateStr) {
+export function get_record(dateStr) {
     const today = _get_start_end_Time()
     const sql = select('t_problem', {})
     return new Promise((resolve, reject) => {
