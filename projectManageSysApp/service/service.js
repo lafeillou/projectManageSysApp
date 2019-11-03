@@ -116,11 +116,26 @@ export function insert_problems(params) {
     })
 }
 
+async function hasInited() {
+    let result = true
+    try {
+        const rows = await select('t_law')
+        if(Array.isArray(rows) && rows.length > 0) {
+            result = false
+        }
+    } catch (e) {
+
+    } finally {
+        return result
+    }
+}
+
 /**
  * 初始化表和表里的数据
  */
-export function initTables() {
-    if(isCover) {
+export async function initTables() {
+    const flag = await hasInited();
+    if(flag) {
         // 需要覆盖数据，先删表，再建表，再导入数据
         clearAllTable()
         // 建表
