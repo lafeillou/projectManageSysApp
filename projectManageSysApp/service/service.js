@@ -1,5 +1,5 @@
 // #ifdef APP-PLUS
-import { t_investigation_rows, t_investigation_type_rows } from './sql'
+import { t_investigation_rows, t_investigation_type_rows, t_history_problem_rows, t_law_rows } from './sql'
 
 export const DB_NAME = 'db';
 // 待复制的数据库文件名
@@ -113,7 +113,7 @@ export function initTables() {
             });
         })
         // 插数据
-        const rows = [...t_investigation_rows, ...t_investigation_type_rows]
+        const rows = [...t_investigation_rows, ...t_investigation_type_rows, ...t_history_problem_rows, ...t_law_rows]
         rows.forEach((row, index) => {
             plus.sqlite.executeSql({
                 name: CUR_DB_NAME,
