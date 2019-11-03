@@ -217,6 +217,12 @@
 				padding:0 20upx;
 				.timeline-item{
 					display:flex;
+					
+					&:last-child{
+						.colB{
+							.colB-inner{border-bottom: none;}
+						}
+					}
 					.colA{
 						flex:none;
 						width:16upx;
@@ -240,9 +246,9 @@
 							content:'   ';
 							display:inline-block;
 							width:2px;
-							height:calc(100% - 18upx);
+							height:calc(100% + 18upx);
 							position:absolute;
-							top:18upx;
+							top:- 18upx;
 							background-color:#e9e9e9;
 							left:8upx;
 							z-index:0;

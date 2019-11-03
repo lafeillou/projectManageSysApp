@@ -92,7 +92,8 @@
 				display:flex;
 				.title{
 					font-size:20upx;
-					color:#333;
+					font-family: '微软雅黑';
+					color:#666;
 					flex:auto;
 					overflow:hidden;
 					text-overflow: ellipsis;
