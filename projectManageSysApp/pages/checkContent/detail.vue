@@ -34,8 +34,9 @@
 						<view class="body-text" style="padding-left:30upx;"><text class="cu-tag bg-blue radius sm" style="margin-right:10upx;">问题{{index + 1}}</text>
 							{{item.result}}
 						</view>
-						<view class="image-list-wrap">
-							
+						
+						<view class="image-list-wrap" v-for="(obj,i) in item.images.split(',')" :key="i" style="display:flex;">
+							<text class="cu-avatar radius" :style="{'background-image':'url('+ obj +')'}" style="flex:none;display:inline-block;width:80upx;height:80upx;"></text>
 						</view>
 					</view>
 				</div>
