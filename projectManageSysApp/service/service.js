@@ -442,7 +442,7 @@ export function search_law(keyword) {
 
 function getHistoryProblemInfo() {
     return new Promise((resolve, reject) => {
-        let sql = `select checkId, count(checkId) as num from t_problem group by checkId`
+        let sql = `select checkId, count(checkId) as num from t_history_problem group by checkId`
         console.log('sql: ', sql);
         plus.sqlite.selectSql({
             name: CUR_DB_NAME,

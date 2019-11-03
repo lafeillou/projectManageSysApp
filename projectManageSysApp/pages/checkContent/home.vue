@@ -19,7 +19,7 @@
 						<view class="content-list-wrap-inner">
 							<view class="content-list-item" v-for="obj in item.children" :key="obj.id">
 								<text class="txt" >{{obj.title}}
-								<text class='cu-tag badge bg-blue' style="position:relative;top:-2upx;">99+</text>
+								<text class='cu-tag badge bg-blue' style="position:relative;top:-2upx;" v-if="historyProblemInfo[obj.id] && historyProblemInfo[obj.id] > 0">{{historyProblemInfo[obj.id]}}</text>
 								</text>
 								<view class="radio-select" style="display:flex;">
 									<view @tap="setTrueValue(obj)" style="flex:none;">
@@ -41,7 +41,9 @@
 			        	<view class="title">{{item.title}}</view>
 			        	<view class="content-list-wrap-inner">
 			        		<view class="content-list-item" v-for="obj in item.children" :key="obj.id">
-			        			<text class="txt">{{obj.title}}</text>
+			        			<text class="txt">{{obj.title}}
+									<text class='cu-tag badge bg-blue' style="position:relative;top:-2upx;" v-if="historyProblemInfo[obj.id] && historyProblemInfo[obj.id] > 0">{{historyProblemInfo[obj.id]}}</text>
+								</text>
 			        			<view class="radio-select" style="display:flex;">
 			        				<view @tap="setTrueValue(obj)" style="flex:none;">
 			        					<radio class="blue radio" :checked="obj.value === 1" :value="obj.value"></radio>
@@ -64,7 +66,9 @@
 			        		<view class="subTitle">{{obj.title}}</view>
 			        		<view class="content-list-wrap-inner">
 			        			<view class="content-list-item" v-for="o in obj.children" :key="o.id">
-			        				<text class="txt">{{o.title}}</text>
+			        				<text class="txt">{{o.title}}
+										<text class='cu-tag badge bg-blue' style="position:relative;top:-2upx;" v-if="historyProblemInfo[o.id] && historyProblemInfo[o.id] > 0">{{historyProblemInfo[o.id]}}</text>
+									</text>
 			        				<view class="radio-select" style="display:flex;">
 										<view @tap="setTrueValue(o)" style="flex:none;">
 											<radio class="blue radio" :checked="o.value === 1" :value="o.value"></radio>
@@ -103,7 +107,9 @@
 		data() {
 			return {
 				current:0,
-				checkListData: []
+				checkListData: [],
+				// 历史问题分checkId统计
+				historyProblemInfo: []
 			}
 		},
 		computed:{
@@ -152,6 +158,18 @@
 				    url: `../checkContent/detail?id=${id}&type=${type}`
 				});
 			},
+			getHistoryProblemsNum(checkId) {
+				let num = 0;
+				_.forEach(this.historyProblemInfo, o => {
+					console.log(JSON.stringify(o));
+					if (o.checkId === checkId ) {
+						// console.log(o.num);
+						num = o.num;
+						return false;
+					}
+				});
+				return num;
+			},
 			getCheckItemList() {
 				return new Promise((resolve,reject) => {
 					uni.showLoading({
@@ -159,7 +177,13 @@
 					});
 					getJCNR().then(res => {
 						if (res.status === 200) {
+							let tempObj = {};
+							_.forEach(res.historyProblemInfo, o => {
+								tempObj[o.checkId] = o.num;
+							})
+							this.historyProblemInfo = tempObj;
 							this.checkListData = res.data
+							console.log(JSON.stringify(res.historyProblemInfo));
 							setTimeout(() => {
 								uni.hideLoading()
 								resolve(res.data)

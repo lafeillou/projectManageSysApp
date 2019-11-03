@@ -76,8 +76,8 @@
 							<view class="colB">
 								<view class="colB-inner">
 									<view class="title-wrap">
-										<text class="time">2019.11.03</text>
-										<button plain class="plain-btn" @click="navToDetail('2019/11/03')">巡回检察记录<text class="cuIcon-right"></text></button>
+										<text class="time">2019.11.04</text>
+										<button plain class="plain-btn" @click="navToDetail('2019/11/04')">巡回检察记录<text class="cuIcon-right"></text></button>
 									</view>
 									<view class="list-wrap">
 										<!-- <view class="list-wrap-item">1、收监检察</view>

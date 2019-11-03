@@ -83,16 +83,9 @@
 			this.currType = option.type;
 			this.getHistoryList(option.id).then(res => {
 				this.historyProblemList = res;
-				// console.log(JSON.stringify(res));
 			})
 			this.getProblemsList(option.id).then(res => {
-				// console.log(JSON.stringify(res));
 				this.problemList = res;
-				// if (this.problemList.length > 0) {
-				// 	let firstItem = this.problemList[0];
-				// 	this.imgList = firstItem.images.split(',');
-				// 	this.remark = firstItem.result;
-				// }
 			})
 		},
 		methods: {
