@@ -307,6 +307,25 @@ export function select(tableName, params){
     })
 }
 
+export function search_law(keyword) {
+    if(!keyword || !keyword.trim()) return
+    return new Promise((resolve, reject) => {
+        let sql = `select t.id,t.name,t.title from t_law t where name like '%${keyword}%' or title like '%${keyword}%' or content like '%${keyword}%'`
+        console.log('sql: ', sql);
+        plus.sqlite.selectSql({
+            name: CUR_DB_NAME,
+            sql,
+            success: function(data){
+                resolve(data)
+            },
+            fail: function(e){
+                console.log('search_law failed: '+JSON.stringify(e));
+                reject(e)
+            }
+        });
+    })
+}
+
 export async function getJCNR() {
     const result = {
         status: 200,
