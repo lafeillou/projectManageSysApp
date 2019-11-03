@@ -34,6 +34,9 @@
 						<view class="body-text" style="padding-left:30upx;"><text class="cu-tag bg-blue radius sm" style="margin-right:10upx;">问题{{index + 1}}</text>
 							{{item.result}}
 						</view>
+						<view class="image-list-wrap">
+							
+						</view>
 					</view>
 				</div>
 				
