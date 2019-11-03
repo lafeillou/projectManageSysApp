@@ -1,29 +1,165 @@
 // #ifdef APP-PLUS
+import { t_investigation_rows, t_investigation_type_rows } from './sql'
+
 export const DB_NAME = 'db';
 // 待复制的数据库文件名
 export const dbFileName = 'local.db'
-const tableSql = [
-    'create table if not exists t_investigation("id" INT(11) PRIMARY KEY,"title" VARCHAR(128),"value" INT(8),"type" VARCHAR(64),"typeId" VARCHAR(11))',
-    'create table if not exists t_investigation_id("id" VARCHAR(16) PRIMARY KEY,"title" VARCHAR(128), "parentId" VARCHAR(16))',
+
+// 自己生成的db别名
+export const SELF_DB_NAME = 'self';
+// 自己生成的db，数据文件名称
+export const SELF_DB_FILENAME = 'self.db'
+// 初始化表数据 是否覆盖初始化
+export const isCover = false
+
+export const CUR_DB_NAME = SELF_DB_NAME
+export const CUR_DBFILENAME = SELF_DB_FILENAME
+
+export const tableNames = [
+    // 所有表名
+    // `sqlite_sequence`
+    `t_history_problem`,
+    `t_investigation`,
+    `t_investigation_type`,
+    `t_law`,
+    `t_problem`,
+    `t_report_perday`,
 ]
-export function initTable() {
-    tableSql.forEach(function (sql) {
-        plus.sqlite.executeSql({
-            name: DB_NAME,
-            sql,
-            success: function(e){
-                console.log('initTable success!');
-            },
-            fail: function(e){
-                console.log('initTable failed: '+JSON.stringify(e));
-            }
-        });
-    })
+const tableSql = [
+    // `create table if not exists sqlite_sequence(name,seq)`,
+    `create table if not exists "t_investigation_type"
+(
+ id integer
+  constraint t_investigation_type_pk
+   primary key autoincrement,
+ title varchar(128),
+ parentId int(8)
+, deep integer
+)`,`
+create table if not exists "t_investigation"
+(
+ id integer
+  constraint t_investigation_pk
+   primary key autoincrement,
+ title varchar,
+ value int(8) default -1,
+ typeId integer
+)`,
+    `create table if not exists t_law
+(
+    id      integer
+        constraint t_law_pk
+            primary key autoincrement,
+    name    text,
+    title   text,
+    content text
+)`,
+    `create table if not exists t_problem
+(
+ id integer
+  constraint t_problem_pk
+   primary key autoincrement,
+ checkId integer not null,
+ result varchar(1024) not null,
+ createTime int(16),
+ type integer,
+ p1 blob,
+ p2 blob,
+ p3 blob,
+ p4 blob
+)`,
+    `create table if not exists t_report_perday
+(
+ id integer
+  constraint t_report_perday_pk
+   primary key autoincrement,
+ time int(16),
+ unit varchar(128),
+ place varchar(128),
+ content varchar(128),
+ people varchar(128),
+ method varchar(128),
+ condition varchar(1024),
+ remark varchar(1024)
+)`,
+    `create table if not exists "t_history_problem" (
+  "id" integer PRIMARY KEY AUTOINCREMENT,
+  "checkId" integer NOT NULL,
+  "description" varchar(1024),
+  "missionName" varchar(128) NOT NULL,
+  "status" integer,
+  "feedback" varchar(1024)
+)`
+]
+
+/**
+ * 初始化表和表里的数据
+ */
+export function initTables() {
+    if(isCover) {
+        // 需要覆盖数据，先删表，再建表，再导入数据
+        clearAllTable()
+        // 建表
+        tableSql.forEach(function (sql) {
+            plus.sqlite.executeSql({
+                name: CUR_DB_NAME,
+                sql,
+                success: function(e){
+                    console.log('initTable success!');
+                },
+                fail: function(e){
+                    console.log('initTable failed: '+JSON.stringify(e));
+                }
+            });
+        })
+        // 插数据
+        const rows = [...t_investigation_rows, ...t_investigation_type_rows]
+        rows.forEach((row, index) => {
+            plus.sqlite.executeSql({
+                name: CUR_DB_NAME,
+                sql: row,
+                success: function(e){
+                    console.log('insert sql index:'+index)
+                },
+                fail: function(e){
+                    console.log('add a row failed: '+JSON.stringify(e));
+                }
+            });
+        })
+        console.log('sql length:'+rows.length)
+    } else {
+        // 无需覆盖数据
+        // 建表,api的机制为 如果已经存在表则无需再新建
+        tableSql.forEach(function (sql) {
+            plus.sqlite.executeSql({
+                name: CUR_DB_NAME,
+                sql,
+                success: function(e){
+                    console.log('initTable success!');
+                },
+                fail: function(e){
+                    console.log('initTable failed: '+JSON.stringify(e));
+                }
+            });
+        })
+        const rows = [...t_investigation_rows, ...t_investigation_type_rows]
+        rows.forEach((row, index) => {
+            plus.sqlite.executeSql({
+                name: CUR_DB_NAME,
+                sql: row,
+                success: function(e){
+                    console.log('insert sql index:'+index)
+                },
+                fail: function(e){
+                }
+            });
+        })
+    }
 }
 
 export function addRow(values, tableName = 't_investigation') {
     plus.sqlite.executeSql({
-        name: DB_NAME,
+        name: CUR_DB_NAME,
         sql: `insert into ${tableName} values(null, '收押罪犯是否符合规定条件、范围',null , '收监检察', 1)`,
         success: function(e){
             console.log('add row success!');
@@ -34,16 +170,22 @@ export function addRow(values, tableName = 't_investigation') {
     });
 }
 
+export function clearAllTable() {
+    tableNames.forEach(function (tableName) {
+        clearTable(tableName)
+    })
+}
+
 export function clearTable(tableName) {
     if(!tableName) return
     plus.sqlite.executeSql({
-        name: DB_NAME,
+        name: CUR_DB_NAME,
         sql: `DELETE FROM ${tableName}`,
         success: function(e){
             console.log(`clear ${tableName} success`);
         },
         fail: function(e){
-            console.log('add row failed: '+JSON.stringify(e));
+            console.log(`clear ${tableName} failed: `, JSON.stringify(e));
         }
     });
 }
@@ -51,7 +193,7 @@ export function clearTable(tableName) {
 export function deleteTables(tableNames = []) {
     tablenames.forEach(function (tableName) {
         plus.sqlite.executeSql({
-            name: DB_NAME,
+            name: CUR_DB_NAME,
             sql: `DROP TABLE ${tableName}`,
             success: function(e){
                 console.log(`deleteTable ${tableName} success`);
@@ -92,8 +234,9 @@ export function update(tableName, row) {
     }
     return new Promise((resolve, reject) => {
         console.log('修改数据行的sql为：', sql)
+        console.log('database name：', CUR_DB_NAME)
         plus.sqlite.executeSql({
-            name: DB_NAME,
+            name: CUR_DB_NAME,
             sql,
             success: function(data){
                 resolve(data)
@@ -128,7 +271,7 @@ export function select(tableName, params){
             sql = sql.substr(0, sql.length-3)
         }
         plus.sqlite.selectSql({
-            name: DB_NAME,
+            name: CUR_DB_NAME,
             sql,
             success: function(data){
                 resolve(data)
