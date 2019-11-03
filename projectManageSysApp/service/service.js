@@ -204,7 +204,7 @@ export function clearTable(tableName) {
     if(!tableName) return
     plus.sqlite.executeSql({
         name: CUR_DB_NAME,
-        sql: `DELETE FROM ${tableName}`,
+        sql: `drop table ${tableName}`,
         success: function(e){
             console.log(`clear ${tableName} success`);
         },
