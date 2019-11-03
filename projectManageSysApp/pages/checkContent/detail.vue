@@ -48,6 +48,24 @@
 		},
 		methods: {
 			ChooseImage() {
+				// 弹出菜单
+				uni.showActionSheet({
+				    itemList: ['拍照', '选择图片'],
+				    success: function (res) {
+				        console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
+						if (res.tapIndex === 1) {
+							this.selectPics();
+						} else if (res.tapIndex === 0) {
+							this.useCamera();
+						}
+				    }.bind(this),
+				    fail: function (res) {
+				        console.log(res.errMsg);
+				    }
+				});
+				
+			},
+			selectPics() {
 				uni.chooseImage({
 					count: 4, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
@@ -59,6 +77,53 @@
 							this.imgList = res.tempFilePaths
 						}
 					}
+				});
+			},
+			useCamera() {
+				plus.camera.getCamera().captureImage(function(absPath) {  
+				        //创建一个 bitmap 对象，参数1是id，参数2是拍照返回的图片绝对路径  
+				    let bitmap = new plus.nativeObj.Bitmap('test', absPath);  
+				        //没办法，费点事，再用 bitmap 保存一下，overwrite 属性表示是否覆盖原来文件，第1个回调是保存成功，第2个回调是保存失败  
+				    bitmap.save(  
+				        absPath,   
+				        {  
+				            overwrite: true,  
+				            format: 'jpg',  
+				        },  
+				        function(event) {  
+				            // Code here  
+				            // 保存后的图片url路径，以"file://"开头  
+				            let target = event.target;  
+				            // 保存后图片的大小，单位为字节（Byte）  
+				            let size = event.size;  
+				            // 保存后图片的实际宽度，单位为px  
+				            let width = event.width;  
+				            // 保存后图片的实际高度，单位为px    
+				            let height = event.height;  
+				            console.log('图片绝对路径: ' + target);
+				            console.log('图片文件大小：' + size);
+				            console.log('图片宽度：' + width);
+				            console.log('图片高度：' + height);
+				            function bytesToSize(bytes) {  
+				                if (bytes === 0) {  
+				                    return '0 B'  
+				                }  
+				                let k = 1000, // or 1024  
+				                sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],  
+				                i = Math.floor(Math.log(bytes) / Math.log(k));  
+				                return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];  
+				            }  
+				            var ss = bytesToSize(size);  
+				            console.log(ss)  
+				        },  
+				        function(error) { 
+							// Error.  
+				            var code = error.code; // 错误编码  
+				            var message = error.message; // 错误描述信息                
+				            console.log(code)  
+				            console.log(message)  
+				        }  
+				    );  
 				});
 			},
 			DelImg(e) {
@@ -73,6 +138,12 @@
 						}
 					}
 				})
+			},
+			ViewImage(e) {
+				uni.previewImage({
+					urls: this.imgList,
+					current: e.currentTarget.dataset.url
+				});
 			}
 		}
 	}
