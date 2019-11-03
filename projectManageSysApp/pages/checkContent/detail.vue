@@ -54,9 +54,9 @@
 		},
 		methods: {
 			// 查询历史问题列表
-			getHistoryList(id) {
+			getHistoryList(checkId) {
 				return new Promise((resolve,reject) => {
-					select('t_history_problem', {id}).then(res => {
+					select('t_history_problem', {checkId}).then(res => {
 						resolve(res);
 					});
 				});
@@ -104,7 +104,8 @@
 				            overwrite: true,  
 				            format: 'jpg',  
 				        },  
-				        function(event) {  
+				        function(event) {
+							imgList.push(absPath);
 				            // Code here  
 				            // 保存后的图片url路径，以"file://"开头  
 				            let target = event.target;  
