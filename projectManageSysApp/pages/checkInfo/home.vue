@@ -77,7 +77,7 @@
 								<view class="colB-inner">
 									<view class="title-wrap">
 										<text class="time">2019.11.04</text>
-										<button plain class="plain-btn" @click="navToDetail()">巡回检察记录<text class="cuIcon-right"></text></button>
+										<button plain class="plain-btn" @click="navToDetail('2019/11/04')">巡回检察记录<text class="cuIcon-right"></text></button>
 									</view>
 									<view class="list-wrap">
 										<!-- <view class="list-wrap-item">1、收监检察</view>
@@ -94,7 +94,7 @@
 								<view class="colB-inner">
 									<view class="title-wrap">
 										<text class="time">2019.11.05</text>
-										<button plain class="plain-btn" @click="navToDetail()">巡回检察记录<text class="cuIcon-right"></text></button>
+										<button plain class="plain-btn" @click="navToDetail('2019/11/05')">巡回检察记录<text class="cuIcon-right"></text></button>
 									</view>
 									<view class="list-wrap">
 										<!-- <view class="list-wrap-item">1、减刑、假释检察</view>
@@ -111,7 +111,7 @@
 								<view class="colB-inner">
 									<view class="title-wrap">
 										<text class="time">2019.11.06</text>
-										<button plain class="plain-btn" @click="navToDetail()">巡回检察记录<text class="cuIcon-right"></text></button>
+										<button plain class="plain-btn" @click="navToDetail('2019/11/06')">巡回检察记录<text class="cuIcon-right"></text></button>
 									</view>
 									<view class="list-wrap">
 										<!-- <view class="list-wrap-item">1、收监检察</view>
@@ -129,7 +129,7 @@
 								<view class="colB-inner">
 									<view class="title-wrap">
 										<text class="time">2019.11.07</text>
-										<button plain class="plain-btn" @click="navToDetail()">巡回检察记录<text class="cuIcon-right"></text></button>
+										<button plain class="plain-btn" @click="navToDetail('2019/11/07')">巡回检察记录<text class="cuIcon-right"></text></button>
 									</view>
 									<view class="list-wrap">
 										<!-- <view class="list-wrap-item">1、收监检察</view>
@@ -147,7 +147,7 @@
 								<view class="colB-inner">
 									<view class="title-wrap">
 										<text class="time">2019.11.08</text>
-										<button plain class="plain-btn" @click="navToDetail()">巡回检察记录<text class="cuIcon-right"></text></button>
+										<button plain class="plain-btn" @click="navToDetail('2019/11/08')">巡回检察记录<text class="cuIcon-right"></text></button>
 									</view>
 									<view class="list-wrap">
 										<!-- <view class="list-wrap-item">1、收监检察</view>
@@ -174,9 +174,9 @@
 			return {}
 		},
 		methods: {
-			navToDetail() {
+			navToDetail(dateStr) {
 				uni.navigateTo({
-				    url: '../checkInfo/detail'
+				    url: `../checkInfo/detail?date=${dateStr}`
 				});
 			}
 		},

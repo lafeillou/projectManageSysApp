@@ -7,7 +7,7 @@
 					<view class="col" style="width:21%"><text class="th">被检察单位</text></view>
 					<view class="col" style="width:29%"><text class="td">蔡甸监狱</text></view>
 					<view class="col" style="width:21%"><text class="th">检察日期</text></view>
-					<view class="col" style="width:29%"><text class="td">2019.11.05</text></view>
+					<view class="col" style="width:29%"><text class="td">{{currDateStr}}</text></view>
 				</view>
 				<view class="row">
 					<view class="col" style="width:21%"><text class="th">检察地点</text></view>
@@ -27,11 +27,11 @@
 				</view>
 				<view class="row">
 					<view class="col" style="width:21%"><text class="th">备注</text></view>
-					<view class="col" style="width:79%"><text class="td">XXXXXXXXXXXXXXXXXX</text></view>
+					<view class="col" style="width:79%"><text class="td"></text></view>
 				</view>
 				<view class="row">
 					<view class="col" style="width:21%"><text class="th">检察员签名</text></view>
-					<view class="col" style="width:79%"><text class="td">XXXXXXXl</text></view>
+					<view class="col" style="width:79%"><text class="td"></text></view>
 				</view>
 			</view>
 		</scroll-view>
@@ -41,8 +41,13 @@
 <script>
 	export default {
 		data() {
-			return {}
-		}
+			return {
+				currDateStr: ''
+			}
+		},
+		onLoad:  function(option) {
+			this.currDateStr = option.date;
+		},
 	}
 </script>
 

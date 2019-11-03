@@ -1,6 +1,6 @@
 <template>
 	<view class="page5">
-		<cu-custom bgColor="bg-gradual-blue" isBack="true"><block slot="backText">返回</block><block slot="content">备注</block><block slot="right"><text style="margin-right:30upx;" @tap="saveProblem()">保存</text></block></cu-custom>
+		<cu-custom bgColor="bg-gradual-blue" :isBack="true"><block slot="backText" @tap.stop="beforeBack" style="padding-left:50upx;position:absolute;left:0;top:34upx;">返回</block><block slot="content">备注</block><block slot="right"><text style="margin-right:30upx;" @tap="saveProblem()">保存</text></block></cu-custom>
 		<scroll-view scroll-y>
 			<view class="input-content-wrap">
 				<textarea class="textAreaInput" type="text" v-model="remark" placeholder="请输入备注内容"/>
@@ -83,27 +83,62 @@
 				// console.log(JSON.stringify(res));
 			})
 			this.getProblemsList(option.id).then(res => {
-				console.log(JSON.stringify(res));
+				// console.log(JSON.stringify(res));
 				this.problemList = res;
-				if (this.problemList.length > 0) {
-					let firstItem = this.problemList[0];
-					this.imgList = firstItem.images.split(',');
-					this.remark = firstItem.result;
-				}
+				// if (this.problemList.length > 0) {
+				// 	let firstItem = this.problemList[0];
+				// 	this.imgList = firstItem.images.split(',');
+				// 	this.remark = firstItem.result;
+				// }
 			})
 		},
 		methods: {
+			// 返回到上一页面之前调用
+			beforeBack() {
+				if (this.remark !== '') {
+					uni.showToast({
+					    title: '请先保存填写的问题！',
+						icon: 'none',
+						position: 'top',
+					    duration: 3000
+					});
+					return false;
+				} else {
+					uni.navigateBack({
+					    delta: 1
+					});
+					return true;
+				}
+			},
 			// 保存问题
 			saveProblem() {
+				if (this.remark === '') {
+					uni.showToast({
+					    title: '请输入备注内容！',
+						icon: 'none',
+						position: 'top',
+					    duration: 3000
+					});
+					return
+				}
 				insert_problems({
 					checkId: this.currCheckId,
 					result: this.remark,
 					images: this.imgList,
 					type:this.currType
 				}).then(res => {
-					// console.log(JSON.stringify(res));
-					select('t_problem').then(res => {
-						console.log(JSON.stringify(res));
+					uni.showToast({
+					    title: '保存成功！',
+						icon: 'none',
+						position: 'top',
+					    duration: 3000
+					});
+					// 清空表单
+					this.remark = '';
+					this.imgList = [];
+					// 把新增数据刷出来
+					this.getProblemsList(this.currCheckId).then(res => {
+						this.problemList = res;
 					})
 				});
 			},
