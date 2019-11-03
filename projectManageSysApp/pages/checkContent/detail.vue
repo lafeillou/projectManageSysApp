@@ -35,7 +35,7 @@
 							{{item.result}}
 						</view>
 						<view class="padding" style="width:100%;height:100upx;background-color:red;" v-for="(obj,i) in item.images.split(',')" :key="i">
-							<image :src="obj" mode="aspectFill" class="cu-avatar margin-right"></image>
+							<image :src="obj" mode="aspectFill"></image>
 						</view>
 						<!-- <view class="padding" v-for="(obj,i) in item.images.split(',')" :key="i">
 							{{JSON.stringify(item.images)}}
