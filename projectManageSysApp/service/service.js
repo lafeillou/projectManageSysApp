@@ -61,6 +61,7 @@ create table if not exists "t_investigation"
    primary key autoincrement,
  checkId integer not null,
  result varchar(1024) not null,
+ images varchar(2048),
  createTime int(16),
  type integer,
  p1 blob,
@@ -91,6 +92,28 @@ create table if not exists "t_investigation"
   "feedback" varchar(1024)
 )`
 ]
+
+/**
+ * 往problem表里新增一条数据
+ * @param params {checkId, result, images, type}
+ * @returns {Promise<unknown>}
+ */
+export function insert_problems(params) {
+    const sql = `INSERT INTO t_problem (checkId, result, images, createTime, type) VALUES (${params.checkId}, ${params.result}, ${params.images}, ${new Date().getTime()}, ${params.type})`
+    return new Promise((resolve, reject) => {
+        plus.sqlite.executeSql({
+            name: CUR_DB_NAME,
+            sql,
+            success: function(data){
+                resolve(data)
+            },
+            fail: function(e){
+                console.log('executeSql failed: '+JSON.stringify(e));
+                reject(e)
+            }
+        });
+    })
+}
 
 /**
  * 初始化表和表里的数据
