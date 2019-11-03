@@ -1,6 +1,6 @@
 <template>
 	<view class="page5">
-		<cu-custom bgColor="bg-gradual-blue" isBack="true"><block slot="backText">返回</block><block slot="content">巡回检察记录</block><block slot="right"><text style="margin-right:30upx;" @tap="saveReport()">保存</text></block></cu-custom>
+		<cu-custom bgColor="bg-gradual-blue" isBack="true"><block slot="backText">返回</block><block slot="content">巡回检察记录</block><block slot="right"><text style="margin-right:20upx;" @tap="refreshReport()">刷新</text><text style="margin-right:30upx;" @tap="saveReport()">保存</text></block></cu-custom>
 		<scroll-view scroll-y class="main-wrap">
 			<view class="custom-table">
 				<view class="row">
@@ -91,6 +91,13 @@
 			});
 		},
 		methods: {
+			// 刷新报告
+			refreshReport() {
+				get_record(this.currDateStr).then(res => {
+					this.reportData = res;
+				})
+			},
+			// 保存报告
 			saveReport() {
 				if (!this.reportData) {
 					uni.showToast({

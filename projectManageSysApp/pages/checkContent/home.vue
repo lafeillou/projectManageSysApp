@@ -18,7 +18,9 @@
 						<view class="title">{{item.title}}</view>
 						<view class="content-list-wrap-inner">
 							<view class="content-list-item" v-for="obj in item.children" :key="obj.id">
-								<text class="txt">{{obj.title}}</text>
+								<text class="txt" >{{obj.title}}
+								<text class='cu-tag badge bg-blue' style="position:relative;top:-2upx;">99+</text>
+								</text>
 								<view class="radio-select" style="display:flex;">
 									<view @tap="setTrueValue(obj)" style="flex:none;">
 										<radio class="blue radio" :checked="obj.value === 1" :value="obj.value"></radio>
@@ -89,7 +91,7 @@
 <script>
 	import Tabs from '../../components/wiszx-tabs/tabs.vue';
 	import TabPane from '../../components/wiszx-tabs/tabPane.vue';
-	import { update, getJCNR } from '../../service/service';
+	import { update, getJCNR, select } from '../../service/service';
 	import _ from 'lodash';
 	
 	export default {
@@ -263,7 +265,7 @@
 					.radio{
 					}
 					.radio-txt {
-						margin-right:30upx;
+						margin-right:20upx;
 						margin-left:4upx;
 						line-height:1em;
 						font-size:16upx;
