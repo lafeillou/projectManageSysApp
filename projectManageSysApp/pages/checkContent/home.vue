@@ -89,7 +89,7 @@
 <script>
 	import Tabs from '../../components/wiszx-tabs/tabs.vue';
 	import TabPane from '../../components/wiszx-tabs/tabPane.vue';
-	import { getJCNR } from '../../service/service';
+	import { update, getJCNR } from '../../service/service';
 	import _ from 'lodash';
 	
 	export default {
@@ -117,27 +117,33 @@
 		    tabsChange(index){
 		        this.current = index;
 		    },
-			// RadioChange(value) {
-				// console.log(JSON.stringify(value));
-				// console.log('radio tap to '+ value.detail.value);
-			// },
+			update(id, newVal) {
+				update('t_investigation', {id:id, value:newVal}).then(res => {
+					console.log(`操作:更新id为${id}检查项的值为${newVal}`)
+					// console.log(`数据库返回:`,JSON.stringify(res))
+				})
+			},
 			setTrueValue(targetObj){
 				if (targetObj.value === 1) {
 					targetObj.value = -1
-					console.log(JSON.stringify(targetObj))
+					// console.log(JSON.stringify(targetObj))
+					this.update(targetObj.id, targetObj.value)
 					return
 				}
 				targetObj.value = 1
-				console.log(JSON.stringify(targetObj))
+				this.update(targetObj.id, targetObj.value)
+				// console.log(JSON.stringify(targetObj))
 			} ,
 			setFalseValue(targetObj){
 				if (targetObj.value === 0) {
 					targetObj.value = -1
-					console.log(JSON.stringify(targetObj))
+					this.update(targetObj.id, targetObj.value)
+					// console.log(JSON.stringify(targetObj))
 					return
 				}
 				targetObj.value = 0
-				console.log(JSON.stringify(targetObj))
+				this.update(targetObj.id, targetObj.value)
+				// console.log(JSON.stringify(targetObj))
 			} ,
 			navToDetail() {
 				uni.navigateTo({
