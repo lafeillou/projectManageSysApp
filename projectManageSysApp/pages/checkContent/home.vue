@@ -145,9 +145,9 @@
 				this.update(targetObj.id, targetObj.value)
 				// console.log(JSON.stringify(targetObj))
 			} ,
-			navToDetail() {
+			navToDetail(id) {
 				uni.navigateTo({
-				    url: '../checkContent/detail'
+				    url: '../checkContent/detail?id=${id}'
 				});
 			},
 			getCheckItemList() {

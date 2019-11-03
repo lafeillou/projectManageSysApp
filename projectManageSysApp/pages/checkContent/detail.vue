@@ -32,7 +32,6 @@
 					<text class="title">历史问题</text>
 					<view class="status"><text>已整改</text></view>
 					<view class="body-text">2018.12.07湖北省黄石市人民检察院检察巡回检察<br/>罪犯王某在交付执行刑罚前剩余刑期不足三个月，应由看守所代为执行。</view>
-					
 				</div>
 			</view>
 		</scroll-view>
@@ -40,13 +39,33 @@
 </template>
 
 <script>
+	import { select } from '../../service/service';
 	export default {
 		data() {
 			return {
+				// 待存储图片列表
 				imgList: []
 			}
 		},
+		onLoad:  function(option) {
+			 // this.getLawDetailById(option.id).then(res => {
+				//  this.detailData = res
+				//  this.detailData.title = res.title.replace(/\\n/g,'<br/>')
+				//  this.detailData.content = res.content.replace(/\\n/g,'<br/>')
+			 // })
+			 this.getHistoryList(option.id).then(res => {
+				 console.log(JSON.stringify(res));
+			 })
+		},
 		methods: {
+			// 查询历史问题列表
+			getHistoryList(id) {
+				return new Promise((resolve,reject) => {
+					select('t_history_problem', {id}).then(res => {
+						resolve(res);
+					});
+				});
+			},
 			ChooseImage() {
 				// 弹出菜单
 				uni.showActionSheet({
