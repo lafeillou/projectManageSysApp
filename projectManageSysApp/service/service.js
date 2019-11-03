@@ -233,7 +233,7 @@ function _get_start_end_Time(str = '', spl = '/') {
 }
 
 export function get_record(dateStr) {
-    const today = _get_start_end_Time()
+    const today = _get_start_end_Time(dateStr)
     return new Promise((resolve, reject) => {
         let sql = `select * from t_problem where createTime between ${today.start} and ${today.end}`
         plus.sqlite.selectSql({
@@ -257,6 +257,10 @@ export function get_record(dateStr) {
                         {title: '教育改造检察', id: 16, children: _16},
                     ]
                     resolve(res)
+                } else {
+                    resolve([{title: '刑罚执行检察', id: 1, children: []},
+                        {title: '狱政管理检察', id: 7, children: []},
+                        {title: '教育改造检察', id: 16, children: []}])
                 }
             },
             fail: function(e){
