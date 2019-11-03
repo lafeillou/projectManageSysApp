@@ -62,7 +62,7 @@ create table if not exists "t_investigation"
  checkId integer not null,
  result varchar(1024) not null,
  images varchar(2048),
- createTime int(16),
+ createTime varchar(32),
  type integer,
  p1 blob,
  p2 blob,
