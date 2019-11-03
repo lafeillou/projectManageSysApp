@@ -73,7 +73,7 @@ create table if not exists "t_investigation"
 (
  id varchar(10)
   constraint t_report_perday_pk
-   primary key autoincrement,
+   primary key,
  time int(16),
  unit varchar(128),
  place varchar(128),
