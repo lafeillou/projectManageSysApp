@@ -12,21 +12,23 @@
 				class="myTabs"
 			    :TabList="TabList"
 			    :currentTab="current"
-			    @tabs="tabsChange"
-		
-			>
+			    @tabs="tabsChange">
 			    <TabPane>
 					<view class="content-list-wrap" v-for="item in checkListData[0].children" :key="item.id">
 						<view class="title">{{item.title}}</view>
 						<view class="content-list-wrap-inner">
 							<view class="content-list-item" v-for="obj in item.children" :key="obj.id">
 								<text class="txt">{{obj.title}}</text>
-								<radio-group class="radio-select" @change="RadioChange">
-									<radio class="blue radio"></radio>
-									<text class="radio-txt">是</text>
-									<radio class="blue radio"></radio>
-									<text class="radio-txt">否</text>
-								</radio-group>
+								<view class="radio-select" style="display:flex;">
+									<view @tap="setTrueValue(obj)" style="flex:none;">
+										<radio class="blue radio" :checked="obj.value === 1" :value="obj.value"></radio>
+										<text class="radio-txt">是</text>
+									</view>
+									<view @tap="setFalseValue(obj)" style="flex:none;">
+										<radio class="blue radio" :checked="obj.value === 0" :value="obj.value"></radio>
+										<text class="radio-txt">否</text>
+									</view>
+								</view>
 								<button plain class="plain-btn" @tap="navToDetail(obj.id)">检察结果<text class="cuIcon-right"></text></button>
 							</view>
 						</view>
@@ -38,12 +40,16 @@
 			        	<view class="content-list-wrap-inner">
 			        		<view class="content-list-item" v-for="obj in item.children" :key="obj.id">
 			        			<text class="txt">{{obj.title}}</text>
-			        			<radio-group class="radio-select" @change="RadioChange">
-			        				<radio class="blue radio"></radio>
-			        				<text class="radio-txt">是</text>
-			        				<radio class="blue radio"></radio>
-			        				<text class="radio-txt">否</text>
-			        			</radio-group>
+			        			<view class="radio-select" style="display:flex;">
+			        				<view @tap="setTrueValue(obj)" style="flex:none;">
+			        					<radio class="blue radio" :checked="obj.value === 1" :value="obj.value"></radio>
+			        					<text class="radio-txt">是</text>
+			        				</view>
+			        				<view @tap="setFalseValue(obj)" style="flex:none;">
+			        					<radio class="blue radio" :checked="obj.value === 0" :value="obj.value"></radio>
+			        					<text class="radio-txt">否</text>
+			        				</view>
+			        			</view>
 			        			<button plain class="plain-btn" @tap="navToDetail(obj.id)">检察结果<text class="cuIcon-right"></text></button>
 			        		</view>
 			        	</view>
@@ -57,12 +63,16 @@
 			        		<view class="content-list-wrap-inner">
 			        			<view class="content-list-item" v-for="o in obj.children" :key="o.id">
 			        				<text class="txt">{{o.title}}</text>
-			        				<radio-group class="radio-select" @change="RadioChange">
-			        					<radio class="blue radio"></radio>
-			        					<text class="radio-txt">是</text>
-			        					<radio class="blue radio"></radio>
-			        					<text class="radio-txt">否</text>
-			        				</radio-group>
+			        				<view class="radio-select" style="display:flex;">
+										<view @tap="setTrueValue(o)" style="flex:none;">
+											<radio class="blue radio" :checked="o.value === 1" :value="o.value"></radio>
+											<text class="radio-txt">是</text>
+										</view>
+										<view @tap="setFalseValue(o)" style="flex:none;">
+											<radio class="blue radio" :checked="o.value === 0" :value="o.value"></radio>
+											<text class="radio-txt">否</text>
+										</view>
+			        				</view>
 			        				<button plain class="plain-btn" @tap="navToDetail(o.id)">检察结果<text class="cuIcon-right"></text></button>
 			        			</view>
 			        		</view>
@@ -77,7 +87,6 @@
 </template>
 
 <script>
-	
 	import Tabs from '../../components/wiszx-tabs/tabs.vue';
 	import TabPane from '../../components/wiszx-tabs/tabPane.vue';
 	import { getJCNR } from '../../service/service';
@@ -108,9 +117,28 @@
 		    tabsChange(index){
 		        this.current = index;
 		    },
-			RadioChange() {
-				console.log('radio tap!');
-			},
+			// RadioChange(value) {
+				// console.log(JSON.stringify(value));
+				// console.log('radio tap to '+ value.detail.value);
+			// },
+			setTrueValue(targetObj){
+				if (targetObj.value === 1) {
+					targetObj.value = -1
+					console.log(JSON.stringify(targetObj))
+					return
+				}
+				targetObj.value = 1
+				console.log(JSON.stringify(targetObj))
+			} ,
+			setFalseValue(targetObj){
+				if (targetObj.value === 0) {
+					targetObj.value = -1
+					console.log(JSON.stringify(targetObj))
+					return
+				}
+				targetObj.value = 0
+				console.log(JSON.stringify(targetObj))
+			} ,
 			navToDetail() {
 				uni.navigateTo({
 				    url: '../checkContent/detail'
