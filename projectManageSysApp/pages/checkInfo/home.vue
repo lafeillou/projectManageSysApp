@@ -1,7 +1,7 @@
 <template name="checkInfo">
-	<view>
+	<view class="page1">
 		<cu-custom bgColor="bg-gradual-blue"><block slot="content">检察信息</block></cu-custom>
-		<scroll-view scroll-y class="page1">
+		<scroll-view scroll-y >
 			<view class="checkInfo-page-wrapper">
 				<view class="checkInfo-item">
 					<text class="title">基本信息</text>
@@ -203,7 +203,7 @@
 <style lang="scss">
 	.page1 {
 		height: 100vh;
-		overflow:auto;
+		overflow-y:auto;
 		.checkInfo-page-wrapper{
 			background-color:#f5f5f9;
 			padding:20upx;
