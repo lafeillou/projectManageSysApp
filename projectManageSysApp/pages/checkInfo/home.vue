@@ -167,19 +167,14 @@
 </template>
 
 <script>
-	import {select, update, get_report_perday} from '../../service/service'
+	import {select, update} from '../../service/service'
 	export default {
 		// name: "CheckInfo",
 		data() {
 			return {}
 		},
 		methods: {
-			navToDetail(dateStr) {
-				get_report_perday(dateStr).then(res => {
-					console.log('先查报告表: ');
-					console.log(JSON.stringify(res));
-				});
-				
+			navToDetail(dateStr) {				
 				uni.navigateTo({
 				    url: `../checkInfo/detail?date=${dateStr}`
 				});

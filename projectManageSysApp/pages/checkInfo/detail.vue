@@ -39,6 +39,7 @@
 </template>
 
 <script>
+	import {get_report_perday, get_record} from '../../service/service'
 	export default {
 		data() {
 			return {
@@ -47,6 +48,17 @@
 		},
 		onLoad:  function(option) {
 			this.currDateStr = option.date;
+			// 是否已经生成了报告
+			get_report_perday(this.currDateStr).then(res => {
+				console.log('先查报告表: ');
+				console.log(JSON.stringify(res));
+				if (res.length === 0) {
+					// 没有生成报告，则去生成报告
+					get_record(this.currDateStr).then(res => {
+						console.log(JSON.stringify(res));
+					})
+				}
+			});
 		},
 	}
 </script>
