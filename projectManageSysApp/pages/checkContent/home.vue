@@ -147,7 +147,7 @@
 			} ,
 			navToDetail(id) {
 				uni.navigateTo({
-				    url: '../checkContent/detail?id=${id}'
+				    url: `../checkContent/detail?id=${id}`
 				});
 			},
 			getCheckItemList() {
