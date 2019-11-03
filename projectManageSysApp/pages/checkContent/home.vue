@@ -15,14 +15,59 @@
 			    @tabs="tabsChange"
 		
 			>
-			    <TabPane >
-					<tabOne ></tabOne>
+			    <TabPane>
+					<view class="content-list-wrap" v-for="item in checkListData[0].children" :key="item.id">
+						<view class="title">{{item.title}}</view>
+						<view class="content-list-wrap-inner">
+							<view class="content-list-item" v-for="obj in item.children" :key="obj.id">
+								<text class="txt">{{obj.title}}</text>
+								<radio-group class="radio-select" @change="RadioChange">
+									<radio class="blue radio"></radio>
+									<text class="radio-txt">是</text>
+									<radio class="blue radio"></radio>
+									<text class="radio-txt">否</text>
+								</radio-group>
+								<button plain class="plain-btn" @tap="navToDetail(obj.id)">检察结果<text class="cuIcon-right"></text></button>
+							</view>
+						</view>
+					</view>
 			    </TabPane>
 			    <TabPane >
-			        <tabTwo></tabTwo>
+			        <view class="content-list-wrap" v-for="item in checkListData[1].children" :key="item.id">
+			        	<view class="title">{{item.title}}</view>
+			        	<view class="content-list-wrap-inner">
+			        		<view class="content-list-item" v-for="obj in item.children" :key="obj.id">
+			        			<text class="txt">{{obj.title}}</text>
+			        			<radio-group class="radio-select" @change="RadioChange">
+			        				<radio class="blue radio"></radio>
+			        				<text class="radio-txt">是</text>
+			        				<radio class="blue radio"></radio>
+			        				<text class="radio-txt">否</text>
+			        			</radio-group>
+			        			<button plain class="plain-btn" @tap="navToDetail(obj.id)">检察结果<text class="cuIcon-right"></text></button>
+			        		</view>
+			        	</view>
+			        </view>
 			    </TabPane>
 			    <TabPane >
-			        <tabThree></tabThree>
+			        <view class="content-list-wrap" v-for="item in checkListData[2].children" :key="item.id">
+			        	<view class="title">{{item.title}}</view>
+			        	<view class="subContentWrap" v-for="obj in item.children" :key="obj.id">
+			        		<view class="subTitle">{{obj.title}}</view>
+			        		<view class="content-list-wrap-inner">
+			        			<view class="content-list-item" v-for="o in obj.children" :key="o.id">
+			        				<text class="txt">{{o.title}}</text>
+			        				<radio-group class="radio-select" @change="RadioChange">
+			        					<radio class="blue radio"></radio>
+			        					<text class="radio-txt">是</text>
+			        					<radio class="blue radio"></radio>
+			        					<text class="radio-txt">否</text>
+			        				</radio-group>
+			        				<button plain class="plain-btn" @tap="navToDetail(o.id)">检察结果<text class="cuIcon-right"></text></button>
+			        			</view>
+			        		</view>
+			        	</view>
+					</view>
 			    </TabPane>
 			</Tabs>
 			
@@ -33,38 +78,66 @@
 
 <script>
 	
-	import Tabs from '../../components/wiszx-tabs/tabs.vue'
-	import TabPane from '../../components/wiszx-tabs/tabPane.vue'
-	import tabOne from './tabs/tabOne.vue'
-	import tabTwo from './tabs/tabTwo.vue'
-	import tabThree from './tabs/tabThree.vue'
+	import Tabs from '../../components/wiszx-tabs/tabs.vue';
+	import TabPane from '../../components/wiszx-tabs/tabPane.vue';
+	import { getJCNR } from '../../service/service';
+	import _ from 'lodash';
 	
 	export default {
 		// name: "CheckContent",
 		components: {
 			Tabs,
-			TabPane,
-			tabOne,
-			tabTwo,
-			tabThree
+			TabPane
 		},
 		data() {
 			return {
 				current:0,
-				TabList:[
-				    {title:'刑罚执行检察'},
-				    {title:'监狱管理检察'},
-				    {title:'教育改造检察'}
-				]
+				checkListData: []
+			}
+		},
+		computed:{
+			TabList: function() {
+				let arr = [];
+				_.forEach(this.checkListData, (o,i) => {
+					arr.push({title: o.title})
+				});
+				return arr;
 			}
 		},
 		methods:{
 		    tabsChange(index){
-		        this.current = index
-		    }
+		        this.current = index;
+		    },
+			RadioChange() {
+				console.log('radio tap!');
+			},
+			navToDetail() {
+				uni.navigateTo({
+				    url: '../checkContent/detail'
+				});
+			},
+			getCheckItemList() {
+				return new Promise((resolve,reject) => {
+					uni.showLoading({
+						title: '加载中...'
+					});
+					getJCNR().then(res => {
+						if (res.status === 200) {
+							this.checkListData = res.data
+							setTimeout(() => {
+								uni.hideLoading()
+								resolve(res.data)
+							},500)
+						}
+					});
+				})
+			}
+		},
+		mounted() {
+			this.getCheckItemList();
 		},
 		onShow() {
-			console.log("success")
+			console.log("success");
 		}
 	}
 </script>
@@ -101,7 +174,69 @@
 				}
 			}
 		}
-		
-		
+	}
+	.content-list-wrap{
+		.title{
+			font-size:20upx;
+			font-weight:bold;
+			padding-left: 15upx;
+			line-height:3em;
+			margin-top:20upx;
+			color:#333;
+		}
+		.subContentWrap{
+			background-color:#fff;
+			.subTitle{
+				padding:20upx 0 0 20upx;
+				font-size:18upx;
+				font-weight:700;
+			}
+		}
+		.content-list-wrap-inner{
+			padding-left:20upx;
+			background-color:#fff;
+			.content-list-item{
+				padding-right:20upx;
+				border-bottom:1upx solid #e4e4e4;
+				display:flex;
+				&:last-child{
+					border-bottom:none;
+				}
+				.txt{
+					color: rgba(51, 51, 51, 0.647058823529412);
+					font-size:18upx;
+					line-height:1.5em;
+					padding:18upx 0;
+					flex:auto;
+				}
+				.plain-btn{
+					float:right;
+					border:none;
+					display:inline-block;
+					background-color:none;
+					font-size:18upx;
+					color:#1890FE;
+					line-height:1em;
+					margin-top:18upx;
+					flex:none;
+				}
+				
+				.radio-select{
+					line-height:1em;
+					float:right;
+					flex:none;
+					margin-top:12upx;
+					.radio{
+					}
+					.radio-txt {
+						margin-right:30upx;
+						margin-left:4upx;
+						line-height:1em;
+						font-size:16upx;
+						color:#666666;
+					}
+				}
+			}
+		}
 	}
 </style>
