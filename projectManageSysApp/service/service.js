@@ -10,7 +10,7 @@ export const SELF_DB_NAME = 'self';
 // 自己生成的db，数据文件名称
 export const SELF_DB_FILENAME = 'self.db'
 // 初始化表数据 是否覆盖初始化
-export const isCover = true
+export const isCover = false
 
 export const CUR_DB_NAME = SELF_DB_NAME
 export const CUR_DBFILENAME = SELF_DB_FILENAME

@@ -27,10 +27,28 @@
 						</view>
 					</view>
 				</view>
+				
+				<div class="history-problem-wrap">
+					<text class="title">本次检察中发现问题</text>
+					<view class="histroy-problem-item" v-for="(item,index) in problemList" :key="item.id">
+						<view class="body-text" style="padding-left:30upx;"><text class="cu-tag bg-blue radius sm" style="margin-right:10upx;">问题{{index + 1}}</text>
+							{{item.result}}
+						</view>
+					</view>
+				</div>
+				
+				
 				<div class="history-problem-wrap">
 					<text class="title">历史问题</text>
-					<view class="status"><text>已整改</text></view>
-					<view class="body-text">2018.12.07湖北省黄石市人民检察院检察巡回检察<br/>罪犯王某在交付执行刑罚前剩余刑期不足三个月，应由看守所代为执行。</view>
+					<view class="histroy-problem-item" v-for="(item,index) in historyProblemList" :key="item.id">
+						<view class="body-text" style="padding-left:30upx;"><text class="cu-tag bg-blue radius sm">问题{{index+1}}</text>
+							<text class="cu-tag bg-green radius sm" v-if="item.status === 1" style="margin-right:10upx;">已整改</text>
+							<text class="cu-tag bg-red radius sm" v-if="item.status === 0" style="margin-right:10upx;">未整改</text>
+							<text class="cu-tag bg-grey radius sm" v-if="item.status === 2" style="margin-right:10upx;">未回复</text>
+							{{item.description}}
+						</view>
+						<view v-if="item.feedback" class="body-text" style="margin-left:30upx;margin-top:20upx;margin-bottom:30upx;padding-left:40upx;border-top:1upx dashed #ddd;padding-top:20upx;"><text class="cu-tag light bg-blue radius sm" style="margin-right:10upx;">回复</text><text>{{item.feedback}}</text></view>
+					</view>
 				</div>
 			</view>
 		</scroll-view>
@@ -47,15 +65,29 @@
 				// 备注文字
 				remark: '',
 				// 待存储图片列表
-				imgList: []
+				imgList: [],
+				// 历史问题
+				historyProblemList: [],
+				// 本次检察中发现问题
+				problemList: []
 			}
 		},
 		onLoad:  function(option) {
 			this.currCheckId = option.id;
 			this.currType = option.type;
-			 this.getHistoryList(option.id).then(res => {
-				 console.log(JSON.stringify(res));
-			 })
+			this.getHistoryList(option.id).then(res => {
+				this.historyProblemList = res;
+				// console.log(JSON.stringify(res));
+			})
+			this.getProblemsList(option.id).then(res => {
+				console.log(JSON.stringify(res));
+				this.problemList = res;
+				if (this.problemList.length > 0) {
+					let firstItem = this.problemList[0];
+					this.imgList = firstItem.images.split(',');
+					this.remark = firstItem.result;
+				}
+			})
 		},
 		methods: {
 			// 保存问题
@@ -66,11 +98,19 @@
 					images: this.imgList,
 					type:this.currType
 				}).then(res => {
-					console.log(res)
+					// console.log(JSON.stringify(res));
 					select('t_problem').then(res => {
-						console.log(res)
+						console.log(JSON.stringify(res));
 					})
-				})
+				});
+			},
+			// 查询本次检察中发现问题列表
+			getProblemsList(checkId) {
+				return new Promise((resolve,reject) => {
+					select('t_problem', {checkId}).then(res => {
+						resolve(res);
+					});
+				});
 			},
 			// 查询历史问题列表
 			getHistoryList(checkId) {
@@ -85,7 +125,7 @@
 				uni.showActionSheet({
 				    itemList: ['拍照', '选择图片'],
 				    success: function (res) {
-				        console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
+				        // console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
 						if (res.tapIndex === 1) {
 							this.selectPics();
 						} else if (res.tapIndex === 0) {
@@ -210,6 +250,10 @@
 			background-color:#fff;
 			padding:0  20upx 20upx 20upx;
 			position:relative;
+			
+			.histroy-problem-item{
+				padding-right:30upx;
+			}
 			.title{
 				display:inline-block;
 				font-size:20upx;
@@ -221,7 +265,7 @@
 			.body-text{
 				font-size:20upx;
 				color:#666;
-				padding-right:57upx;
+				// padding-right:57upx;
 			}
 			.status{
 				color:rgba(0, 0, 0, 0.647058823529412);
