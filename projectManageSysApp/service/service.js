@@ -71,7 +71,7 @@ create table if not exists "t_investigation"
 )`,
     `create table if not exists t_report_perday
 (
- id integer
+ id varchar(10)
   constraint t_report_perday_pk
    primary key autoincrement,
  time int(16),
@@ -212,6 +212,95 @@ export function clearTable(tableName) {
             console.log(`clear ${tableName} failed: `, JSON.stringify(e));
         }
     });
+}
+
+function _get_start_end_Time(str = '', spl = '/') {
+    const res = {
+        start: 0,
+        end: 0
+    }
+    if(!str || !str.trim()) return res
+    const arr = str.split(spl)
+    const year = arr[0]
+    const month = arr[1]
+    const day = arr[2]
+    let s = new Date()
+    s.setFullYear(year, month -1 , day)
+    s.setHours(0,0,0)
+    res.start = s.getTime()
+    res.end = (res.start + 86400000)
+    return res
+}
+
+function get_record(dateStr) {
+    const today = _get_start_end_Time()
+    const sql = select('t_problem', {})
+    return new Promise((resolve, reject) => {
+        let sql = `select * from t_problem where createTime between ${today.start} and ${today.end}`
+        plus.sqlite.selectSql({
+            name: CUR_DB_NAME,
+            sql,
+            success: function(data){
+                if(Array.isArray(data) && data.length > 0) {
+                    // 1 7 16
+                    const _1 = data.filter(function (item) {
+                        return item.type == 1
+                    })
+                    const _7 = data.filter(function (item) {
+                        return item.type == 7
+                    })
+                    const _16 = data.filter(function (item) {
+                        return item.type == 16
+                    })
+                    const res = [
+                        {title: '刑罚执行检察', id: 1, children: _1},
+                        {title: '狱政管理检察', id: 7, children: _7},
+                        {title: '教育改造检察', id: 16, children: _16},
+                    ]
+                    resolve(res)
+                }
+            },
+            fail: function(e){
+                console.log('selectSql failed: '+JSON.stringify(e));
+                console.log('failed sql: '+sql);
+                reject(e)
+            }
+        });
+    })
+}
+
+/**
+ * 往problem表里新增一条数据
+ * @param params {id:'2019/11/3', condition}
+ * @returns {Promise<unknown>}
+ */
+export function insert_report_perday(params) {
+    const sql = `INSERT INTO t_report_perday (id, condition) VALUES ('${params.id}', '${params.condition}')`
+    console.log(sql);
+    return new Promise((resolve, reject) => {
+        plus.sqlite.executeSql({
+            name: CUR_DB_NAME,
+            sql,
+            success: function(data){
+                resolve(data)
+            },
+            fail: function(e){
+                const sql2 = `UPDATE t_report_perday SET condition = '${params.condition}' WHERE id = '${params.id}' `
+                plus.sqlite.executeSql({
+                    name: CUR_DB_NAME,
+                    sql: sql2,
+                    success: function(data){
+                        console.log('update t_report_perday success')
+                        console.log('sql:', sql2)
+                    },
+                    fail: function(e){
+                        console.log('executeSql failed: '+JSON.stringify(e));
+                        reject(e)
+                    }
+                });
+            }
+        });
+    })
 }
 
 export function deleteTables(tableNames = []) {
