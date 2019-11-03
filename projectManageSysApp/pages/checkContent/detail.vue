@@ -48,11 +48,6 @@
 			}
 		},
 		onLoad:  function(option) {
-			 // this.getLawDetailById(option.id).then(res => {
-				//  this.detailData = res
-				//  this.detailData.title = res.title.replace(/\\n/g,'<br/>')
-				//  this.detailData.content = res.content.replace(/\\n/g,'<br/>')
-			 // })
 			 this.getHistoryList(option.id).then(res => {
 				 console.log(JSON.stringify(res));
 			 })
