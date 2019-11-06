@@ -12,8 +12,8 @@ export const SELF_DB_FILENAME = 'self.db'
 // 初始化表数据 是否覆盖初始化
 export const isCover = false
 
-export const CUR_DB_NAME = SELF_DB_NAME
-export const CUR_DBFILENAME = SELF_DB_FILENAME
+export const CUR_DB_NAME = DB_NAME
+export const CUR_DBFILENAME = dbFileName
 
 export const tableNames = [
     // 所有表名
@@ -506,63 +506,231 @@ export async function getJCNR() {
     return result
 }
 
-export function copyDataBase() {
-    let desDir = null
-    plus.io.requestFileSystem( plus.io.PRIVATE_DOC, function( fs ) {
-        // 可通过fs进行文件操作
-        console.log( "File system name: " + fs.name );
-        // 通过fs.root获取DirectoryEntry对象进行操作
-        desDir = fs.root
-        const directoryReader = fs.root.createReader();
+/**
+ *
+ * @param path  plus.io.PRIVATE_DOC
+ * @returns {Promise<unknown>}
+ * @private
+ */
+function _read_folder(path) {
+    return new Promise((resolve, reject) => {
+        plus.io.requestFileSystem(path, function( fs ) {
+            resolve(fs.root)
+        }, function (e) {
+            resolve(null)
+        })
+    })
+}
+
+function _copy_db_to(desDir) {
+    return new Promise((resolve => {
+        plus.io.requestFileSystem( plus.io.PRIVATE_WWW, function( fs ) {
+            // 可通过fs进行文件操作
+            console.log( "File system name: " + fs.name );
+            // 通过fs.root获取DirectoryEntry对象进行操作
+            const b = fs.root.createReader();
+            b.readEntries( function( entries ){
+                entries.forEach(function (item) {
+                    console.log('_www下面有如下文件：' ,item.name );
+                    if(item.name === 'static') {
+                        item.createReader().readEntries(function (arr) {
+                            arr.forEach(function (obj) {
+                                console.log('static下面有：' ,obj.name );
+                                if(obj.name === dbFileName) {
+                                    obj.copyTo( desDir, dbFileName, function () {
+                                        console.log('复制数据成功')
+                                        resolve(true)
+                                    }, function (e) {
+                                        console.log('复制数据失败', e.message)
+                                        resolve(false)
+                                    });
+                                }
+                            })
+                        });
+                    }
+                })
+            }, function ( e ) {
+                console.log( "Read entries failed: " + e.message );
+            } );
+        }, function ( e ) {
+            console.log( "Request file system failed: " + e.message );
+        } );
+    }))
+}
+
+function _folder_file(folder, fileName) {
+    return new Promise((resolve, reject) => {
+        const directoryReader = folder.createReader();
         directoryReader.readEntries( function( entries ){
+            let thisFile = null
+            console.log('_folder_file 进来了， folder参数是：',folder, ' fileName:', fileName)
             entries.forEach(function (item) {
-                console.log('_doc下面有如下文件：' ,item.name );
-                if(item.name = dbFileName) {
-                    item.remove( function () {
-                        console.log( `删除 已经存在的 ${dbFileName} 成功`);
-                    })
+                console.log(`${folder.name} 下面的文件有：`, item.name)
+                if(item.name = fileName) {
+                    thisFile = item
                 }
             })
+            console.log('_folder_file 结果：', thisFile)
+            if(thisFile) {
+                resolve(thisFile)
+            } else {
+                resolve(null)
+            }
         }, function ( e ) {
-            console.log( "Read entries failed: " + e.message );
+            console.log( "Read _doc/ failed: " + e.message );
         } );
-    }, function ( e ) {
-        console.log( "Request file system failed: " + e.message );
-    } );
-    plus.io.requestFileSystem( plus.io.PRIVATE_WWW, function( fs ) {
-        // 可通过fs进行文件操作
-        console.log( "File system name: " + fs.name );
-        // 通过fs.root获取DirectoryEntry对象进行操作
-        const directoryReader = fs.root.createReader();
-        directoryReader.readEntries( function( entries ){
-            entries.forEach(function (item) {
-                console.log('_www下面有如下文件：' ,item.name );
-                if(item.name === 'static') {
-                    /*item.getDirectory( "newDir", {create:false,exclusive:false}, function( dir ){
-                        console.log("Directory Entry Name: " + dir.name);
-                    }, function () {
-                        console.( e.message );
-                    } );*/
-                    console.log('static full path：' ,item.fullPath );
-                    item.createReader().readEntries(function (arr) {
-                        arr.forEach(function (obj) {
-                            console.log('static下面有：' ,obj.name );
-                            if(obj.name === dbFileName) {
-                                obj.copyTo( desDir, dbFileName, function () {
-                                    console.log('复制数据成功')
-                                }, function (e) {
-                                    console.log('复制数据失败', e.message)
-                                });
-                            }
+    })
+}
+
+function _del_file(file) {
+    return new Promise((resolve, reject) => {
+        file.remove( function () {
+            console.log( `删除 已经存在的 ${file.name} 成功`);
+            resolve(true)
+        }, function () {
+            resolve(false)
+        })
+    })
+}
+
+function copyTo(file, des) {
+    console.log(`待复制的文件名是 ${file.name}`)
+    return new Promise((resolve, reject) => {
+        file.copyTo( des, file.name, function () {
+            console.log(`copy ${file.name} success`)
+            resolve(true)
+        }, function (e) {
+            console.log('复制数据失败', e.message)
+            resolve(false)
+        });
+    })
+}
+
+async function del() {
+    const folder = await _read_folder(plus.io.PRIVATE_DOC)
+    const file = await _folder_file(folder, CUR_DBFILENAME)
+    let res = true
+    if(file) {
+        res = await _del_file(file)
+    }
+    // file为null的话 本来就没有文件 和删除效果一样 也返回true 故res的值默认为true
+    return res
+}
+
+/**
+ * 删除掉 私有目录 doc/ 下的文件
+ * 删除成功返回 该目录对象
+ * @params fileName  要删除的文件名 dbFileName
+ * @returns {Promise<unknown>}
+ */
+function del_doc_file(fileName) {
+    return new Promise((resolve, reject) => {
+        plus.io.requestFileSystem( plus.io.PRIVATE_DOC, function( fs ) {
+            // 可通过fs进行文件操作
+            // 通过fs.root获取DirectoryEntry对象进行操作
+            // desDir = fs.root
+            const directoryReader = fs.root.createReader();
+            directoryReader.readEntries( function( entries ){
+                let thisFile = null
+                entries.forEach(function (item) {
+                    if(item.name = fileName) {
+                        thisFile = item
+                    }
+                })
+                if(thisFile) {
+                    thisFile.remove( function () {
+                        console.log( `删除 已经存在的 ${fileName} 成功`);
+                        plus.io.requestFileSystem( plus.io.PRIVATE_DOC, function( fs1 ) {
+                            resolve(fs1.root)
                         })
-                    });
+                    })
+                } else {
+                    reject(null)
                 }
-            })
+            }, function ( e ) {
+                console.log( "Read _doc/ failed: " + e.message );
+            } );
         }, function ( e ) {
-            console.log( "Read entries failed: " + e.message );
+            console.log( "Request file system failed: " + e.message );
         } );
-    }, function ( e ) {
-        console.log( "Request file system failed: " + e.message );
-    } );
+    })
+}
+
+/**
+ * 获得_www/static/ 下的文件
+ * 有则返回出来 没有则返回空
+ */
+function get_Static_file(fileName) {
+    return new Promise((resolve, reject) => {
+        plus.io.requestFileSystem(plus.io.PRIVATE_WWW, function (fs) {
+            // 可通过fs进行文件操作
+            // 通过fs.root获取DirectoryEntry对象进行操作
+            const directoryReader = fs.root.createReader();
+            directoryReader.readEntries(function (entries) {
+                entries.forEach(function (item) {
+                    if (item.name === 'static') {
+                        // console.log('static full path：' ,item.fullPath );
+                        item.createReader().readEntries(function (arr) {
+                            arr.forEach(function (obj) {
+                                console.log('static下面有：', obj.name);
+                                if (obj.name === fileName) {
+                                    resolve(obj)
+                                }
+                            })
+                        });
+                    }
+                })
+            }, function (e) {
+                console.log("Read entries failed: " + e.message);
+            });
+        }, function (e) {
+            console.log("Request file system failed: " + e.message);
+        });
+    })
+}
+
+
+export async function copyDataBase() {
+    const flag = await del()
+    console.log('await del():', flag)
+    if(flag) {
+        const _www = await _read_folder(plus.io.PRIVATE_WWW)
+        const _doc = await _read_folder(plus.io.PRIVATE_DOC)
+        const _static = await _folder_file(_www, 'static')
+        console.log('_static:', _static.name)
+        console.log('_www:', _www.name)
+        console.log('_doc:', _doc.name)
+        // let db = await _folder_file(_static, CUR_DBFILENAME)
+        // return await copyTo(db, _doc)
+        return await _copy_db_to(_doc)
+    }
+}
+
+function openStaticDB() {
+    // 判断sqlite 是否已经打开 无需重复打开
+    const boolean = plus.sqlite.isOpenDatabase({
+        name: `db`,
+        path: `_doc/local.db`
+    })
+    if(boolean) return
+    // 没打开 则打开sqlite
+    plus.sqlite.openDatabase({
+        name: `db`,
+        path: `_doc/local.db`,
+        success: function(e){
+            console.log('open static Database success!');
+        },
+        fail: function(e){
+            console.log('open static Database failed: '+JSON.stringify(e));
+        }
+    });
+}
+function closeStaticDB() {
+    plus.sqlite.closeDatabase({
+        name: `db`,
+        success: function(e){
+            console.log('close static Database success!');
+        },
+    })
 }
 // #endif

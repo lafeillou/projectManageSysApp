@@ -83,10 +83,12 @@
 					// #endif
                     // #ifdef APP-PLUS
                     // initTable();
-                    // copyDataBase();
+                    copyDataBase().then(res => {
+                        openStaticDB()
+                    })
                     // openStaticDB();
-                    openDB();
-                    initTables()
+                    // openStaticDB();
+                    // initTables()
                     // #endif
 				}
 			})
@@ -94,7 +96,7 @@
 		onShow: function() {
 			console.log('App Show')
             // #ifdef  APP-PLUS
-            openDB();
+            // openStaticDB();
             // openStaticDB();
             // #endif
 		},
@@ -102,7 +104,7 @@
 			console.log('App Hide')
             // 当前应用not active时 关闭sqlite 释放资源
             // #ifdef  APP-PLUS
-            closeDB()
+            // closeStaticDB()
             // closeStaticDB()
             // #endif
 		}
