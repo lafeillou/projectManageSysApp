@@ -1,5 +1,6 @@
 <script>
 	import Vue from 'vue'
+    import {showConfirmUpdate} from '../../service/update'
     import { initTables, copyDataBase, CUR_DBFILENAME, CUR_DB_NAME } from './service/service.js'
     const DB_PATH = `_doc/${CUR_DBFILENAME}` //_doc/localbase.db
     const DB_NAME = CUR_DB_NAME
@@ -86,9 +87,7 @@
                     copyDataBase().then(res => {
                         openStaticDB()
                     })
-                    // openStaticDB();
-                    // openStaticDB();
-                    // initTables()
+                    showConfirmUpdate()
                     // #endif
 				}
 			})
@@ -96,16 +95,14 @@
 		onShow: function() {
 			console.log('App Show')
             // #ifdef  APP-PLUS
-            // openStaticDB();
-            // openStaticDB();
+            openStaticDB();
             // #endif
 		},
 		onHide: function() {
 			console.log('App Hide')
             // 当前应用not active时 关闭sqlite 释放资源
             // #ifdef  APP-PLUS
-            // closeStaticDB()
-            // closeStaticDB()
+            closeStaticDB()
             // #endif
 		}
 

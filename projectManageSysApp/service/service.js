@@ -612,6 +612,7 @@ async function del() {
     let res = true
     if(file) {
         res = await _del_file(file)
+        // await _del_file(await _folder_file(folder, (CUR_DBFILENAME+'-wal')))
     }
     // file为null的话 本来就没有文件 和删除效果一样 也返回true 故res的值默认为true
     return res
