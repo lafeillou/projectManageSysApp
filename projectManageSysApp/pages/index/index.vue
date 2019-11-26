@@ -32,7 +32,7 @@
 		data() {
 		return {
 				PageCur: 'checkInfo',
-				loged: false
+				loged: true
 			}
 		},
 		methods: {
